@@ -20,3 +20,4 @@ console.warn: SearchSettings: "get: No settings file exists, new profile?" (new 
 1620653918534	Marionette	WARN	TLS certificate errors will be ignored for this session
 
 (/usr/lib/firefox/firefox:673976): GLib-GObject-CRITICAL **: 15:38:38.575: g_object_set: assertion 'G_IS_OBJECT (object)' failed
+1620673545160	geckodriver	INFO	Listening on 127.0.0.1:47321

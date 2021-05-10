@@ -469,7 +469,6 @@ class _WeatherChannel:
         
             return self.parsefcast(svg,tempnow,unit=unit)
         except Exception as e:
-            raise e
             err=WeatherError(f"could not get forecast for city {cityname}")
             if countryname==_DONTCHECK:
                 raise err
@@ -477,7 +476,7 @@ class _WeatherChannel:
     def ipforecast(self,ip):
         return self.forecast(*refresh(ip))
     def _prstmpstr(self,string):
-        pattern=re.compile('^(\d+)°')
+        pattern=re.compile(r'^([0-9\-]+)°')
         match=pattern.search(string)
 
         if not match:
