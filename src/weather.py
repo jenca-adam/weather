@@ -1,4 +1,5 @@
 import json
+
 from bs4 import BeautifulSoup as bs
 from httplib2 import Http
 import httplib2
@@ -10,6 +11,9 @@ from selenium.webdriver import *
 import warnings
 import os
 import re
+import platform
+import subprocess
+from pathlib import Path
 locator=Nominatim(user_agent="geoapiExercises")
 _h=Http()
 CELSIUS=0
@@ -35,6 +39,8 @@ class IpError(ValueError):pass
 class Fail(IpError):pass
 class InvalidQuery(Fail):pass
 class ReservedRange(Fail):pass
+class SetupError(WeatherError):pass
+class ReadonlyError(Exception):pass
 def searchurl(query):
     return f'https://google.com/search?q={query}'
 def getstate(city):
@@ -118,18 +124,69 @@ class _WeatherChannel:
     def __init__(self):
         self.driver=None
     class Weather:
-        def __init__(self,temp,humidity,wind):
+        def __init__(self,wind,precip,temp):
             self.temp=temp
-            self.humidity=humidity
+            self.precip=precip
             self.wind=wind
     class Day:
-        def __init__(self,dayname,highest,lowest,desc):
-            self.dayname=dayname
-            self.highest=highest
-            self.lowest=lowest
-            self.desc=desc
-        def __repr__(self):
-            return repr(self.__dict__)
+        def __init__(self,weatherlist,wdict):
+            '''
+            self.highest=max(
+                            max(i.temp for i in weatherlist)
+                            )
+            self.lowest=min(
+                            min(i.temp for i in weatherlist)
+                            )'''
+            self.weather_as_list=weatherlist
+            self.weather_as_dict=wdict
+        def __getitem__(self,i):
+            return self.gettemp(i)
+        def splittime(self,time,after=int):
+            try:
+                return tuple(after(i) for i in time.split(':'))
+            except ValueError:
+                raise ValueError(
+                                f"invalid value for 'splittime':{time}"
+                                )
+        def fillin(self,time):
+            return self.jointime(self.formatsec(i) for i in  self.splittime(time,after=str))
+        def formatsec(self,time):
+            if len(time)>2:
+                raise ValueError('not 2-digit or 1-digit time')
+            if len(time)<2:
+                return "0"+time
+            return time
+        def jointime(self,time):
+            return ':'.join(str(i) for i in time)
+        def gettemp(self,time):
+            if isinstance(time,str):
+                time=self.splittime(time)
+            return self.weather_as_dict[self.fillin(self.repairtime(self.jointime(time)))]
+        def timetoint(self,time):
+            if isinstance(time,str):
+                return self.splittime(time)[1]+self.splittime(time)[0]*60
+            return time[1]+time[0]*60
+        def inttotime(self,i):
+            return (i//60,i%60)
+
+        def repairtime(self,time):
+            closest=lambda num,collection:min(collection,key=lambda x:abs((x-num)+1))
+            dy=self.weather_as_dict
+
+            dy=[self.timetoint(time) for time in dy]
+            qr=self.timetoint(self.roundtime(time))
+            return self.jointime(self.inttotime(closest(qr,dy)))
+            
+        def roundtime(self,time):
+
+            mins=int(time.split(':')[-1])
+            if mins==0:
+                return time
+            hrs=int(time.split(':')[0])
+            if mins<50:
+                return f'{self.formatsec(hrs)}:00'
+            return f'{self.formatsec(hrs+1)}:00'
+
     def convert(self,d):
         l={}
         for a in d:
@@ -150,7 +207,7 @@ class _WeatherChannel:
             l.append(m)
         return l
     class Forecast:
-        def __init__(self,temp,today,nxt,temps):
+        def __init__(self,temp,today,nxt):
             e=None
             if not isinstance(today,_WeatherChannel.Day):
                 raise TypeError(
@@ -164,11 +221,13 @@ class _WeatherChannel:
             for i in nxt:
                 if not isinstance(i,_WeatherChannel.Day):
                     raise TypeError(
-                    f"all members of 'nxt' argument must be \"weather.day.Day\", not {i.__class__}'")
+                    f"all members of 'nxt' argument must be \"_WeatherChannel.Day\", not {i.__class__}'")
             self.temp=temp
             self.today=today
-            self.nxt=nxt
-            self.temps=temps           
+            self.days=nxt
+            self.tomorrow=nxt[0]
+        def day(self,num):
+            return self.days[num]
         def splittime(self,time,after=int):
             try:
                 return tuple(after(i) for i in time.split(':'))
@@ -213,8 +272,6 @@ class _WeatherChannel:
             if mins<50:
                 return f'{self.formatsec(hrs)}:00'
             return f'{self.formatsec(hrs+1)}:00'
-        def __repr__(self):
-            return repr(_WeatherChannel.convert(_WeatherChannel,self.__dict__))
     def splittime(self,time,after=int):
             try:
                 return tuple(after(i) for i in time.split(':'))
@@ -248,12 +305,102 @@ class _WeatherChannel:
         precip_soup=bs(precip_html,
                         'html.parser')
         columns=precip_soup.findAll(class_="wob_hw")
-    def getwind(self,ch):pass
+        days=[]
+        graph={}
+        lastTime=0
+        for col in columns:
+            
+            time=col.div['aria-label'].split(' ')[-1]
+            perc=int(
+                    col.div['aria-label'].
+                    split(' ')[0].
+                    replace('%',''))
+            if self.splittime(time)[0]<lastTime:
+                    days.append(graph)
+                    graph={}
+            graph[time]=perc
+            lastTime=self.splittime(time)[0]
+        return days
+
+            
+    def getwind(self,ch):
+        wind_html_element=ch.find_element_by_id('wob_wg')
+        wind_html=wind_html_element.get_attribute('outerHTML')
+        wind_soup=bs(wind_html,
+                        'html.parser')
+        spds=wind_soup.findAll(class_="wob_hw")
+        days=[]
+        graph={}
+        lastTime=0
+        for selem in spds:
+            time=selem.div.span['aria-label'].split(' ')[-1]
+            spd=selem.div.span.text.split(' ')[0]
+            if self.splittime(time)[0]<lastTime:
+                days.append(graph)
+                graph={}
+            graph[time]=int(spd)
+            lastTime=self.splittime(time)[0]
+
+        return days
     def getgraph(self,ch,unit):
         svg=self.getsvg(ch,unit)
         precip=self.getprecip(ch)
         wind=self.getwind(ch)
-        return svg
+
+        svglist=[list(a.keys()) for a in svg]
+        preciplist=[list(a.keys()) for a in precip]
+        windlist=[list(a.keys()) for a in wind]
+        wthrs=[]
+        wthrs_inner=[]
+        ind=0
+        for a in wind:
+            inner=0
+            wthrs_inner=[]
+            
+            for j in a:
+                t=a[j]
+                wthrs_inner.append(
+                             self.Weather(
+                                          t,
+                                          precip[ind][j],
+                                          svg[ind][j]
+                                          )
+                                )
+                inner+=1
+            ind+=1
+            wthrs.append(wthrs_inner)
+        wtdct=[]
+        wtdc_inner={}
+        ind=0
+        for s in wind:
+            inner=0
+            wtdc_inner={}
+            for j in s:
+                t=a[j]
+                wtdc_inner[j]=self.Weather(
+                                          t,
+                                          precip[ind][j],
+                                          svg[ind][j]
+                                          )
+                                
+                inner+=1
+            ind+=1
+            wtdct.append(wtdc_inner)
+        days=[]
+        yndex=0
+        for day in wtdct:
+            days.append(
+                        self.Day(
+                            wthrs[yndex],
+                            wtdct[yndex],
+                            )
+                        )
+            yndex+=1
+        return days
+    
+        
+
+                                     
     def analyzesvg(self,svg,unit):
         if isinstance(svg,list) :
             warnings.warn(
@@ -283,14 +430,10 @@ class _WeatherChannel:
             curcels=not curcels
         return days
 
-    def parsefcast(self,d,temp,svg,unit=CELSIUS):
-
-        soup=bs(d,'html.parser')
-        g=soup.find_all(class_="wob_df")
-        g=[self.parseday(i,unit=unit) for i in g]
-        first=g[0]
-        nxt=g[1:]
-        return self.Forecast(temp,first,nxt,svg)
+    def parsefcast(self,days,temp,unit=CELSIUS):
+        first=days[0]
+        nxt=days[1:]
+        return self.Forecast(temp,first,nxt)
     def forecast(self,cityname=CITY,countryname='',unit=None):
         err=None
         if self.driver is None:
@@ -304,7 +447,7 @@ class _WeatherChannel:
                 err=NoSuchCityError(f"no such city: '{cityname}'")
         if err:
             raise err
-        if cityname==CITY:
+        if cityname==CITY and not countryname:
             countryname=COUNTRY
         if unit is None:
             if countryname.lower()=='united states':
@@ -324,8 +467,9 @@ class _WeatherChannel:
             tempnow=int(soup.body.find_all('span',class_="wob_t")[unit].text)
             fli=soup.body.find('div',id="wob_dp")
         
-            return self.parsefcast(str(fli),tempnow,svg,unit=unit)
-        except:
+            return self.parsefcast(svg,tempnow,unit=unit)
+        except Exception as e:
+            raise e
             err=WeatherError(f"could not get forecast for city {cityname}")
             if countryname==_DONTCHECK:
                 raise err
@@ -340,6 +484,123 @@ class _WeatherChannel:
             raise ValueError(
                             'Could not parse temperature string')
         return int(match.group(0).replace('°',''))
+class _YR_NORI:
+    class SearchResults:
+        def __init__(self,l):
+            self.res=l
+            self.first=l[0]
+        def __getitem__(self,item):
+            return self.result(item)
+        def __setitem__(self,item,what):
+            raise ReadonlyError('read-only')
+        def result(self,i):
+            return self.res[i]
+        def __repr__(self):
+            return repr(self.res)
+    class Day:
+        def __init__(self,wlst,wdict):
+            self.wlst=wlst
+            self.wdict=wdict
+
+        def __getitem__(self,i):
+            return self.gettemp(i.split(':')[0])
+        def splittime(self,time,after=int):
+            try:
+                return tuple(after(i) for i in time.split(':'))
+            except ValueError:
+                raise ValueError(
+                                f"invalid value for 'splittime':{time}"
+                                )
+        def fillin(self,time):
+            return self.jointime(self.formatsec(i) for i in  self.splittime(time,after=str))
+        def formatsec(self,time):
+            if len(time)>2:
+                raise ValueError('not 2-digit or 1-digit time')
+            if len(time)<2:
+                return "0"+time
+            return time
+        def jointime(self,time):
+            return ':'.join(str(i) for i in time)
+        def gettemp(self,time):
+            if isinstance(time,str):
+                time=self.splittime(time)
+            return self.weather_as_dict[self.fillin(self.repairtime(self.jointime(time)))]
+        def timetoint(self,time):
+            if isinstance(time,str):
+                return self.splittime(time)[1]+self.splittime(time)[0]*60
+            return time[1]+time[0]*60
+        def inttotime(self,i):
+            return (i//60,i%60)
+
+        def repairtime(self,time):
+            closest=lambda num,collection:min(collection,key=lambda x:abs((x-num)+1))
+            dy=self.weather_as_dict
+
+            dy=[self.timetoint(time) for time in dy]
+            qr=self.timetoint(self.roundtime(time))
+            return self.jointime(self.inttotime(closest(qr,dy)))
+            
+        def roundtime(self,time):
+
+            mins=int(time.split(':')[-1])
+            if mins==0:
+                return time
+            hrs=int(time.split(':')[0])
+            if mins<50:
+                return f'{self.formatsec(hrs)}:00'
+            return f'{self.formatsec(hrs+1)}:00'
+
+    class Forecast:
+        def __init__(self,days):
+            self.days=days
+        def __getitem__(self,i):
+            return self.day(i)
+        def __setitem__(self,item,what):
+            raise ReadonlyError('read-only')
+
+        def day(self,daynum):
+            return self.days[daynum]
+    def searchurl(self,q):
+        return f'https://yr.no/en/search?q={q}'
+    def expandhref(self,href):
+        return f'https://yr.no{href}'
+    def search(self,q):
+        self.driver=_driverSearch().best()
+        self.driver.get(
+            self.searchurl(q)
+            )
+        results=bs(self.driver.find_elements_by_class_name('search-results-list')[0].get_attribute('outerHTML'),
+        'html.parser')
+        results=results.findAll('li')
+        results=[self.expandhref(result.a['href']) for result in results]
+        return self.SearchResults(results) 
+    def forecast(self,cityname=CITY,countryname=COUNTRY):
+        err=None
+        if self.driver is None:
+            driver=_driverSearch()
+            self.driver=driver.best()
+        wd=self.driver
+        if not countryname:
+            try:
+                countryname=getstate(cityname)
+            except AttributeError:
+                err=NoSuchCityError(f"no such city: '{cityname}'")
+        if err:
+            raise err
+        if cityname==CITY and not countryname:
+            countryname=COUNTRY
+        if unit is None:
+            if countryname.lower()=='united states':
+                unit=FAHRENHEIT
+            else:
+                unit=CELSIUS
+        if countryname==_DONTCHECK:
+            query=f'weather {cityname}'
+        else:
+            query=f'weather {cityname} {countryname}'
+        c=search(query).result(0)
+        return self.ForecastParser(c)
+
 class _driverSearch:
     def __init__(self):
         
@@ -423,7 +684,7 @@ class _driverSearch:
             raise DriverError(
                 '''None of web drivers installed. 
                     Check https://jenca-adam.github.io/projects/weather/docs.html#special_requirements .
-                    Alternatively, you can use weather.NOAA or weather.yrno instead of weather.google .
+                    Alternatively, you can use weather.NOAA instead of weather.google .
                 ''')
     def _checkin(self,a,b,index=0):
         for i in a:
@@ -489,6 +750,94 @@ class _driverSearch:
             if self._checkin(self.headlessopt,b):
                     return b(options=self._gethopt(b))
             return b()
+class _SetterUp:
+    SYSTEM=platform.system()
+    if SYSTEM=='Windows':
+        CHROMEDRIVER_URL="https://github.com/jenca-adam/jenca-adam.github.io/raw/master/projects/weather/extras/bin/win/chromedriver.exe"
+        GECKODRIVER_URL="https://github.com/jenca-adam/jenca-adam.github.io/raw/master/projects/weather/extras/bin/win/geckodriver.exe"
+    elif SYSTEM == 'Linux':
+        CHROMEDRIVER_URL="https://github.com/jenca-adam/jenca-adam.github.io/raw/master/projects/weather/extras/bin/linux/chromedriver"
+        GECKODRIVER_URL="https://github.com/jenca-adam/jenca-adam.github.io/raw/master/projects/weather/extras/bin/linux/geckodriver"
+    else:
+        CHROMEDRIVER_URL="https://github.com/jenca-adam/jenca-adam.github.io/raw/master/projects/weather/extras/bin/mac/chromedriver"
+        GECKODRIVER_URL="https://github.com/jenca-adam/jenca-adam.github.io/raw/master/projects/weather/extras/bin/mac/geckodriver"
+    
+    HOME=str(Path.home())
+    INSTALL_DIR=os.path.join(HOME,'.local/bin')
+    if '.local' not in os.listdir(HOME):
+        p=os.getcwd()
+        os.chdir(HOME)
+        os.mkdir('.local')
+        os.mkdir('.local/bin')
+        os.chdir(p)
+    elif 'bin' not in os.listdir(os.path.join(HOME,'.local')):
+        p=os.getcwd()
+        os.chdir(HOME)
+        os.mkdir('.local/bin')
+        os.chdir(p)
+    if INSTALL_DIR not in os.environ["PATH"].split(os.pathsep):
+        os.environ["PATH"]+=os.pathsep+INSTALL_DIR
+    CHROMEDRIVER_INSTALL=os.path.join(INSTALL_DIR,CHROMEDRIVER_URL.split('/')[-1])
+    GECKODRIVER_INSTALL=os.path.join(INSTALL_DIR,GECKODRIVER_URL.split('/')[-1])
+    def install_cdr(self):
+        
+        h=Http()
+        r,content=h.request(self.CHROMEDRIVER_URL)
+        with open(self.CHROMEDRIVER_INSTALL,'wb')as f:
+            f.write(content)
+        os.chmod(self.CHROMEDRIVER_INSTALL,0o777)
+    def install_gecko(self):
+        h=Http()
+        r,content=h.request(self.GECKODRIVER_URL)
+        with open(self.GECKODRIVER_INSTALL,'wb')as f:
+            f.write(content)
+        os.chmod(self.GECKODRIVER_INSTALL,0o777)
+
+    def setup(self,drivers=['chromedriver','geckodriver']):
+        if not drivers:
+            raise SetupError('please specify at least one driver')
+        chopt=chrome.options.Options()
+        ffxopt=firefox.options.Options()
+        chopt.headless=True
+        ffxopt.headless=True
+        if 'chromedriver' in drivers:
+            
+            try:
+                Chrome(options=chopt)
+            except:
+                self._setup(drivers=['chromedriver'])
+        if 'geckodriver' in drivers:
+            try:
+                Firefox(options=ffxopt)
+            except:
+                self._setup(drivers=['geckodriver'])
+
+    def _setup(self,drivers):
+        
+        if not drivers:
+            raise SetupError('please specify at least one driver')
+        if 'chromedriver' in drivers:
+            self.install_cdr()
+        if 'geckodriver' in drivers:
+            self.install_gecko()
+        chopt=chrome.options.Options()
+        ffxopt=firefox.options.Options()
+        chopt.headless=True
+        ffxopt.headless=True
+        try:
+            Chrome(options=chopt)
+        except:
+            try:
+                Firefox(options=ffxopt)
+            except:
+                raise SetupError('''
+                                 Please note that weather.setup() works only for Firefox and Chrome for now.
+                                 You have 2 options:
+                                    1.Install Firefox or Chrome
+                                    2.Don't call weather.setup on initializing and install one of the drivers manually.
+                                    ''')
+                
+        
 class _cukor:
     def cukor(a,b,c,d,e):
         result=[]
@@ -509,4 +858,5 @@ class _cukor:
         
 
 google=_WeatherChannel()
-
+yrno=_YR_NORI()
+setup=_SetterUp()
