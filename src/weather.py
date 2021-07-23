@@ -16,6 +16,13 @@ import platform
 import subprocess
 from pathlib import Path
 import selenium
+import colorama
+import inspect
+import sys
+import importlib
+import difflib
+from unitconvert.temperatureunits import TemperatureUnit as tu
+from lxml import etree
 '''Python library for getting weather from different sources.
 Example:
 >>> import weather
@@ -23,23 +30,41 @@ Example:
 >>> weather.forecast("Chicago").tomorrow["0:00"].temp
 #Get temperature in current location today at noon
 >>> weather.forecast().today["12:00"].temp
-#Get precipitation probability after two days in Seoul at 4 o'clock
+#Get precipitation amount after two days in Seoul at 4 o'clock
 >>> weather.forecast('Seoul').day(2)["16:00"].precip
 
 '''
+#__OWM_TOKEN="84e57133df9ae058f3e26f7e60ae5cad"
+DEBUG=False
 locator=Nominatim(user_agent="geoapiExercises")
-_h=Http()
+_h=Http('.cache')
 CELSIUS=0
 UNIT=CELSIUS
 FAHRENHEIT=1
 _DONTCHECK=-1
 '''Google chrome headers, used in BetaChrome'''
 _HDR={"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36"}
+class _debugger:
+    class BadStatus(Exception):pass
+    def debug(self,text,status="INFO"):
+        if not DEBUG:
+            return
+        colors={"INFO":colorama.Fore.LIGHTBLUE_EX,"ERROR":colorama.Fore.LIGHTRED_EX,"DEBUG":colorama.Fore.LIGHTMAGENTA_EX,"WARNING":colorama.Fore.LIGHTYELLOW_EX}
+        if status not in colors:
+            raise self.BadStatus("BAD STATUS")
+        previous_frame = inspect.currentframe().f_back
+        (filename, lineno, 
+         function_name, lines, index) = inspect.getframeinfo(previous_frame)
+        sys.stdout.write( f'{colorama.Fore.CYAN}{filename}:{lineno}:{function_name} {colorama.Fore.RESET}-> {colors[status]}{status}{colorama.Style.RESET_ALL}:{colors[status]}{text}{colorama.Style.RESET_ALL}\n')
+debugger=_debugger()
 class Browser:
     '''Metaclass of BetaChrome used to bypass Google bot detection'''
-    def request(self,url):
+    def request(self,url,headers={}):
         '''Request url and set USER-AGENT headers'''
-        return _h.request(url,headers=self.HEADERS)
+        debugger.debug('requested url')
+        hdr=self.HEADERS
+        hdr.update(headers)
+        return _h.request(url,headers=hdr)
 class BetaChrome(Browser):
     '''Used to bypass Google bot detection'''
     HEADERS=_HDR
@@ -53,18 +78,18 @@ class SVGWarning(WeatherWarning):
 class NoHeadlessWarning(DriverWarning):
     '''User is warned when no headless driver is not avaliable'''
 class WeatherError(BaseException):
-    '''Metaclass of WeatherError and  NoSuchCityError'''
+    '''Metaclass of most errors defined here'''
 class NoSuchCityError(WeatherError):
     '''Raised when city was not found using Nominatim'''
 class DriverError(Exception):
     '''Raised when no driver is avaliable'''
-h=httplib2.Http()
+h=httplib2.Http('.cache')
 class IpError(ValueError):
     '''Metaclass of  Fail'''
 class Fail(IpError):
     '''Metaclass of InvalidQuery and ReservedRange'''
 class InvalidQuery(Fail):
-    '''Raised when user entered non-existing IPv4 to track()'''
+    '''Raised when user entered non-existing IP to track()'''
 class ReservedRange(Fail):
     '''Raised when user entered 
        localhost or 127.0.0.1 or 0.0.0.0 to track()'''
@@ -76,6 +101,23 @@ class SetupError(WeatherError):
 class ReadonlyError(Exception):
     '''
     Raised when user want to change Forecast, Day or SearchResult's attributes'''
+class UnknownServiceError(WeatherError):
+    '''
+    Raised when user tried to use service that does not exist. 
+    Should be served along with some " Did you mean <>?" suggestions
+    '''
+class PropertyError(WeatherError):
+    '''
+    Metaclass of WindError
+    '''
+class WindError(PropertyError):
+    '''
+    Raised when invalid wind properties are given
+    '''
+class DirectionError(WindError):
+    '''
+    Raised when direction is not "N","NE","E","SE","S","SW","W" or "NW"(if it is a string) or higher than 360(if it is a integer)
+    '''
 def searchurl(query):
     '''Returns Google Search URL according to query'''  
     return f'https://google.com/search?q={query}'
@@ -112,6 +154,36 @@ def track(ip=''):
     resp=_track(ip)
     checkresp(resp,ip)
     return resp
+class Direction:
+    __ANGLEDICT={0:'N',45:'NE',90:'E',135:'SE',180:'S',225:'SW',270:'W',315:'NW',360:'N'}
+    __rvang={value:key for key,value in __ANGLEDICT.items()}
+    def __init__(self,ang):
+        if isinstance(ang,bool):
+            raise TypeError(
+                    f"angle must be 'str' or 'int', not {ang.__class__.__name__!r}"
+                    )
+        if ang is None:
+            self.direction='UNKNOWN'
+            return
+        if isinstance(ang,(int,float)):
+            ang=int(ang)
+            if ang>360:
+                raise DirectionError("wind angle is more than 360")
+            self.direction=self.__ANGLEDICT[min(self.__ANGLEDICT, key=lambda x:abs(x-ang))]
+            self.angle=ang
+        elif isinstance(ang,str):
+            if ang.upper() not in self.__rvang:
+                raise DirectionError(
+                        f"invalid wind direction : {ang!r} ( valid are {','.join(self.__ANGLEDICT.values())} )"
+                        )
+            self.direction=ang.upper()
+            self.angle=self.__rvang[ang.upper()]
+        else:
+            raise TypeError(
+                    f"angle must be 'str' or 'int', not {ang.__class__.__name__!r}"
+                    )
+    def __repr__(self):
+        return self.direction
 class Location:
     '''Implementation of location'''
     def __init__(self,lat,lon,country,country_code,region_code,region,city,zipcode,tzone):
@@ -124,6 +196,11 @@ class Location:
         self.city=city
         self.zipcode=zipcode
         self.tzone=tzone
+
+class Wind():
+    def __init__(self,speed=None,direction=None):
+        self.direction=Direction(direction)
+        self.speed=speed
 def _parse_loc(resp):
     '''Returns Location object from data returned by track''' 
     return Location(
@@ -157,7 +234,7 @@ COUNTRY=LOCATION.country
 if COUNTRY=='United States':
     UNIT=FAHRENHEIT
 def refresh(ip=''):
-    '''Gets city and country from current location(or IP location'''
+    '''Gets city and country from current location(or IP location)'''
     if not ip:
         city=curloc().city
         country=curloc().country
@@ -166,6 +243,95 @@ def refresh(ip=''):
         country=iploc(ip).country
 
     return city,country
+class _fcdumper:
+    def dump(self,forecast,file):
+        if isinstance(forecast,_WeatherChannel.Forecast):
+            source='google'
+        elif isinstance(forecast,_YR_NORI.Forecast):
+            source='yrno'
+        elif isinstance(forecast,_7Timer.Forecast):
+            source='7timer'
+        else:
+            raise TypeError("bad forecast type")
+        froot=etree.Element('forecast')
+        forelem=etree.SubElement(froot,'location')
+        cityelem=etree.SubElement(forelem,'city')
+        countryelem=etree.SubElement(forelem,'country')
+        countryelem.text=forecast.country
+        unt=forecast.today.weather_as_list[0].unit
+        untel=etree.SubElement(froot,'unit')
+        untel.text='C' if unt==CELSIUS else 'F'
+        cityelem.text=forecast.city
+        srcel=etree.SubElement(froot,'source')
+        srcel.text=source
+        root=etree.SubElement(froot,'days')
+                 
+        dind=0
+        for d in forecast.days:
+            delem=etree.SubElement(root,'day',index=str(dind))
+            
+            for w in d.weather_as_dict:
+                recelem=etree.SubElement(delem,'record')
+                wa=d.weather_as_dict[w]
+                timelem=etree.SubElement(recelem,'time')
+                timelem.text=w
+                weather=etree.SubElement(recelem,'weather')
+
+                telem=etree.SubElement(weather,'temp')
+                telem.text=str(wa.temp)
+                pelem=etree.SubElement(weather,'precip')
+                pelem.text='0.0' if not wa.precip else str(int(wa.precip))
+                welem=etree.SubElement(weather,'wind')
+                wspeed=etree.SubElement(welem,'speed')
+                wdir=etree.SubElement(welem,'direction')
+                wang=etree.SubElement(wdir,'angle')
+                wcomp=etree.SubElement(wdir,'compass')
+
+                wspeed.text=str(wa.wind.speed)
+                wang.text=str(wa.wind.direction.angle)
+                wcomp.text=wa.wind.direction.direction
+                helem=etree.SubElement(weather,'humid')
+                helem.text="0" if not wa.humid else str(wa.humid)
+            dind+=1
+        with open(file,'w') as f:
+            f.write(etree.tounicode(froot,pretty_print=True))
+    def load(self,xmlfile):
+        t=etree.parse(open(xmlfile))
+        unit=t.find('.//unit').text
+        city=t.find('.//city').text
+        src=t.find('.//source').text
+        srcsvc=SERVICES[src]
+        country=t.find('.//country').text
+        times=t.findall('.//time')
+        temps=t.findall('.//temp')
+        precps=t.findall('.//precip')
+        humids=t.findall('.//humid')
+        wspeeds=t.findall('.//speed')
+        wangs=t.findall('.//angle')
+        wcomps=t.findall('.//compass')
+        records=len(times)
+        cdix=0
+        weather_as_dict={}
+        forecast=[]
+        for wi in range(records):
+            tm=times[wi].text
+            temp=float(temps[wi].text)
+            precip=float(precps[wi].text)
+            humid=float(humids[wi].text)
+            wind=float(wspeeds[wi].text)
+            wdirct=float(wangs[wi].text)
+            dix=int(temps[wi].getparent().getparent().getparent().attrib['index'])
+
+            if dix>cdix:
+                forecast.append(srcsvc.__class__.Day(list(weather_as_dict.values()),weather_as_dict))
+                weather_as_dict={}
+            weather_as_dict[tm]=srcsvc.__class__.Weather(Wind(wind,wdirct),precip,temp,humid,unit)
+            cdix=dix
+        return srcsvc.__class__.Forecast(forecast,city,country)
+
+
+        
+
 class _WeatherChannel:
     '''weather.google type'''
     def __init__(self):
@@ -173,10 +339,13 @@ class _WeatherChannel:
         self.driver=None
     class Weather:
         '''Implementation of weather'''
-        def __init__(self,wind,precip,temp):
+        def __init__(self,wind,precip,temp,humid=None,unit=CELSIUS):
             self.temp=temp
             self.precip=precip
             self.wind=wind
+            self.humid=humid
+            self.unit=unit
+            
     class Day:
         '''Implementation of day'''
         def __init__(self,weatherlist,wdict):
@@ -205,9 +374,11 @@ class _WeatherChannel:
             return self.jointime(self.formatsec(i) for i in  self.splittime(time,after=str))
         def formatsec(self,time):
             '''Formats seconds E.g:formatsec("8")="08"'''
-            if len(time)>2:
+            if len(str(time))>2:
                 raise ValueError('not 2-digit or 1-digit time')
-            if len(time)<2:
+            if not time:
+                return "00"
+            if len(str(time))<2:
                 return "0"+time
             return time
         def jointime(self,time):
@@ -269,11 +440,14 @@ class _WeatherChannel:
         return l
     class Forecast:
         '''Implemantation of weather forecast'''
-        def __init__(self,temp,today,nxt):
+        def __init__(self,temp,today,nxt,city,ctr):
+            self.city=city
+            self.country=ctr
+            debugger.debug("created forecast")
             e=None
             if not isinstance(today,_WeatherChannel.Day):
                 raise TypeError(
-                f"'today' argument must be weather._WeatherChannel.Day, not {today.__class__}'")
+                f"'today' argument must be weather._WeatherChannel.Day, not {today.__class__.__name__}'")
             try:
                 iter(nxt)
             except:
@@ -283,7 +457,7 @@ class _WeatherChannel:
             for i in nxt:
                 if not isinstance(i,_WeatherChannel.Day):
                     raise TypeError(
-                    f"all members of 'nxt' argument must be \"_WeatherChannel.Day\", not {i.__class__}'")
+                    f"all members of 'nxt' argument must be \"_WeatherChannel.Day\", not {i.__class__.__name__}'")
             self.temp=temp
             self.today=today
             self.days=nxt
@@ -356,6 +530,7 @@ class _WeatherChannel:
         lowest=self.parsetemp(tmps.find(class_="QrNVmd ZXCv8e"),unit=unit)
         return self.Day(dayname,highest,lowest,desc)
     def getsvg(self,ch,unit):
+        debugger.debug("Getting temperature") 
         '''Gets SVG with temperature'''
         try:
                 ch.find_elements_by_class_name("jyfHyd")[1].click()
@@ -367,6 +542,7 @@ class _WeatherChannel:
         return self.analyzesvg(svg,unit)
     def getprecip(self,ch):
         '''Gets precipitation data'''
+        debugger.debug("Analyzing precipitation")
         precip_html_element=ch.find_element_by_id('wob_pg')
         precip_html=precip_html_element.get_attribute('outerHTML')
         precip_soup=bs(precip_html,
@@ -391,7 +567,8 @@ class _WeatherChannel:
 
             
     def getwind(self,ch):
-        '''Gets wind data''' 
+        '''Gets wind data'''
+        debugger.debug("Analyzing wind")
         wind_html_element=ch.find_element_by_id('wob_wg')
         wind_html=wind_html_element.get_attribute('outerHTML')
         wind_soup=bs(wind_html,
@@ -412,6 +589,7 @@ class _WeatherChannel:
         return days
     def getgraph(self,ch,unit):
         '''Gets full data and formats them into Forecast object'''
+        debugger.debug("Parser has started!")
         svg=self.getsvg(ch,unit)
         precip=self.getprecip(ch)
         wind=self.getwind(ch)
@@ -422,6 +600,7 @@ class _WeatherChannel:
         wthrs=[]
         wthrs_inner=[]
         ind=0
+        debugger.debug("Formating weather data into forecast")
         for a in wind:
             inner=0
             wthrs_inner=[]
@@ -430,9 +609,10 @@ class _WeatherChannel:
                 t=a[j]
                 wthrs_inner.append(
                              self.Weather(
-                                          t,
+                                          Wind(t),
                                           precip[ind][j],
-                                          svg[ind][j]
+                                          svg[ind][j],
+                                          unit=unit
                                           )
                                 )
                 inner+=1
@@ -447,7 +627,7 @@ class _WeatherChannel:
             for j in s:
                 t=a[j]
                 wtdc_inner[j]=self.Weather(
-                                          t,
+                                          Wind(t),
                                           precip[ind][j],
                                           svg[ind][j]
                                           )
@@ -472,6 +652,7 @@ class _WeatherChannel:
                                      
     def analyzesvg(self,svg,unit):
         '''Changes svg to dict of temperatures'''
+        debugger.debug("Analyzing temperature")
         if isinstance(svg,list) :
             warnings.warn(
                           SVGWarning(
@@ -500,14 +681,15 @@ class _WeatherChannel:
             curcels=not curcels
         return days
 
-    def parsefcast(self,days,temp,unit=CELSIUS):
+    def parsefcast(self,days,temp,unit,city,ctr):
         '''Parses forecast'''
         first=days[0]
         nxt=days[1:]
-        return self.Forecast(temp,first,nxt)
-    def forecast(self,cityname=CITY,countryname='',unit=None):
+        return self.Forecast(temp,first,nxt,city,ctr)
+    def forecast(self,cityname=CITY,countryname='',unit=None,driver=None):
         '''Gets forecast'''
         err=None
+        self.driver=driver
         if self.driver is None:
             driver=_driverSearch()
             self.driver=driver.best()
@@ -539,9 +721,10 @@ class _WeatherChannel:
             tempnow=int(soup.body.find_all('span',class_="wob_t")[unit].text)
             fli=soup.body.find('div',id="wob_dp")
         
-            return self.parsefcast(svg,tempnow,unit=unit)
+            return self.parsefcast(svg,tempnow,unit,cityname,countryname)
         except Exception as e:
-            err=WeatherError(f"could not get forecast for city {cityname}")
+            debugger.debug(f"could not load forecast for {cityname}, trying without country","ERROR")
+            err=WeatherError(f"could not get forecast for city {cityname}({str(e)} throwed)")
             if countryname==_DONTCHECK:
                 raise err
             return self.forecast(cityname,_DONTCHECK,unit)
@@ -576,8 +759,8 @@ class _YR_NORI:
     class Day:
         '''Implementation of one day'''
         def __init__(self,wlst,wdict):
-            self.wlst=wlst
-            self.wdict=wdict
+            self.weather_as_list=wlst
+            self.weather_as_dict=wdict
 
         def __getitem__(self,i):
             return self.gettemp(i.split(':')[0])
@@ -591,10 +774,13 @@ class _YR_NORI:
         def fillin(self,time):
             return self.jointime(self.formatsec(i) for i in  self.splittime(time,after=str))
         def formatsec(self,time):
-            if len(time)>2:
+            if len(str(time))>2:
                 raise ValueError('not 2-digit or 1-digit time')
-            if len(time)<2:
-                return "0"+time
+            if not time:
+                return ""
+            if len(str(time))<2:
+                return "0"+str(time)
+            
             return time
         def jointime(self,time):
             return ':'.join(str(i) for i in time)
@@ -629,8 +815,12 @@ class _YR_NORI:
 
     class Forecast:
         '''implementation of weather forecast'''
-        def __init__(self,days):
+        def __init__(self,days,city,country):
+            self.today=days[0]
+            self.tomorrow=days[1]
             self.days=days
+            self.city=city
+            self.country=country
         def __getitem__(self,i):
             return self.day(i)
         def __setitem__(self,item,what):
@@ -638,32 +828,54 @@ class _YR_NORI:
 
         def day(self,daynum):
             return self.days[daynum]
-    
+    class Weather:
+        '''Implementation of weather'''
+        def __init__(self,wind,precip,temp,humid=None,unit=CELSIUS):
+            self.temp=temp
+            self.precip=precip
+            self.wind=wind
+            self.humid=humid
+            self.unit=unit
     class _ForecastParser:
         '''Parses forecast'''
-        def parse(self,driver,u):   
-            '''Gets temperature'''
-            temps_final=[]
-            time_final=[]
-            for i in range(9):
-                driver.get(f'{u}?i={i}')
-                time.sleep(0.1)
-                hlava=driver.page_source
-                     
-                sp=bs(hlava,
-                      'html.parser'
-                      )
-                temps=sp.find_all("span", class_="temperature temperature--warm")
-                temps_final.append([parser.detectint(t.text) for t in temps])
-            return temps_final
+        def parse(self,content,unit,ci,co):
+            content=json.loads(content)
+            timeseries=content["properties"]["timeseries"]
+            weather_as_dict={}
+            fcast=[]
+            lastday=None
+            for wr in timeseries:
+                war=wr["data"]
+                tm=self.parsetime(wr["time"])
+                dy=self.parseday(wr["time"])
+                instant=war["instant"]["details"]
+                temp=instant["air_temperature"]
+                wind=instant["wind_speed"]
+                wdirct=instant["wind_from_direction"]
+                precip=war["next_1_hours"]["details"]["precipitation_amount"] if "next_1_hours" in war else 0.0
+                humid=instant["relative_humidity"]
+                weather_as_dict[tm]=_YR_NORI.Weather(Wind(wind,wdirct),precip,temp,humid,unit)
+                if lastday is not None:
+                    if dy!=lastday:
+                        fcast.append(_YR_NORI.Day(list(weather_as_dict.values()),weather_as_dict))
+                        weather_as_dict={}
+                lastday=dy
+            return _YR_NORI.Forecast(fcast,ci,co)
+
         def close_ad(self,driver):
             '''Closes "We have a new graph" pop-up'''
             try:
                 driver.find_elements_by_class_name("feature-promo-modal-meteogram__link")[0].click()
             except:pass
+        def parsetime(self,time):
+            pattern=re.compile('(\d{2}\:\d{2})\:\d{2}')
+            return pattern.search(time).group(1)
+        def parseday(self,time):
+            pattern=re.compile('\d{4}-\d{2}-(\d{2})')
+            return pattern.search(time).group(1)
 
 
-                
+             
     def searchurl(self,q):
         '''Returns yr.no search URL'''
         return f'https://www.yr.no/en/search?q={q}'
@@ -684,9 +896,223 @@ class _YR_NORI:
     def forecast(self,cityname=CITY,countryname=COUNTRY,unit=None):
         '''Gets forecast'''
         err=None
-        if self.driver is None:
-            driver=_driverSearch()
-            self.driver=driver.best()
+        if not countryname:
+            try:
+                countryname=getcountry(cityname)
+            except AttributeError:
+                err=NoSuchCityError(f"no such city: '{cityname}'")
+        if err:
+            raise err
+        if cityname==CITY and not countryname:
+            countryname=COUNTRY
+        if cityname==CITY and countryname==COUNTRY:
+            lat,lon=LOCATION.lat,LOCATION.lon
+        else:
+            loct=locator.geocode(f'{cityname},{countryname}')
+            lat,lon=loct.latitude,loct.longitude
+        if unit is None:
+            if countryname.lower()=='united states':
+                unit=FAHRENHEIT
+            else:
+                unit=CELSIUS
+        apiurl=f'https://api.met.no/weatherapi/locationforecast/2.0/compact?lat={lat}&lon={lon}'        
+        return self.ForecastParser.parse(BetaChrome().request(apiurl)[1],unit,cityname,countryname)
+class _7Timer:
+    '''7timer.info source'''
+    def __init__(self):
+        self.driver=None
+        self.ForecastParser=self._ForecastParser()
+    class Day:
+        '''Implementation of one day'''
+        def __init__(self,wlst,wdict):
+            self.weather_as_list=wlst
+            self.weather_as_dict=wdict
+
+        def __getitem__(self,i):
+            return self.gettemp(i.split(':')[0])
+        def splittime(self,time,after=int):
+            try:
+                return tuple(after(i) for i in time.split(':'))
+            except ValueError:
+                raise ValueError(
+                                f"invalid value for 'splittime':{time}"
+                                )
+        def fillin(self,time):
+            return self.jointime(self.formatsec(i) for i in  self.splittime(time,after=str))
+        def formatsec(self,time):
+            if len(str(time))>2:
+                raise ValueError('not 2-digit or 1-digit time')
+            if not time:
+                return ""
+            if len(str(time))<2:
+                return "0"+str(time)
+            
+            return time
+        def jointime(self,time):
+            return ':'.join(str(i) for i in time)
+        def gettemp(self,time):
+            if isinstance(time,str):
+                time=self.splittime(time)
+            return self.weather_as_dict[self.fillin(self.repairtime(self.jointime(time)))]
+        def timetoint(self,time):
+            if isinstance(time,str):
+                return (self.splittime(time)[1]+self.splittime(time)[0]*60)%1440
+            return (time[1]+time[0]*60)%1440
+        def inttotime(self,i):
+            return (i//60,i%60)
+
+        def repairtime(self,time):
+            closest=lambda num,collection:min(collection,key=lambda x:abs((x-num)+1))
+            dy=self.weather_as_dict
+
+            dy=[self.timetoint(time) for time in dy]
+            qr=self.timetoint(self.roundtime(time))
+            return self.jointime(self.inttotime(closest(qr,dy)))
+            
+        def roundtime(self,time):
+
+            mins=int(time.split(':')[-1])
+            if mins==0:
+                return time
+            hrs=int(time.split(':')[0])
+            if mins<50:
+                return f'{self.formatsec(hrs)}:00'
+            return f'{self.formatsec(hrs+1)}:00'
+
+    class Forecast:
+        '''implementation of weather forecast'''
+        def __init__(self,days,ci,co):
+            self.days=days
+            self.today=days[0]
+            self.tomorrow=days[1]
+            self.city=ci
+            self.country=co
+        def __getitem__(self,i):
+            return self.day(i)
+        def __setitem__(self,item,what):
+            raise ReadonlyError('read-only')
+
+        def day(self,daynum):
+            return self.days[daynum]
+    class Weather:
+        '''Implementation of weather'''
+        def __init__(self,wind,precip,temp,humid=None,unit=CELSIUS):
+            self.temp=temp
+            self.precip=precip
+            self.wind=wind
+            self.humid=humid
+            self.unit=unit
+ 
+    class _ForecastParser:
+        '''Parses forecast'''
+        def parse(self,content,unit,ci,co):
+            content=json.loads(content)
+            lit=content['dataseries']
+            weather_as_dict={}
+            fcast=[]
+            dnum=1
+            for qeqeq in lit:
+                tm=self.mktime(
+                        self.inttotime(
+                        self.timetoint(
+                            str(
+                                qeqeq['timepoint']
+                                )+':00'
+                            )+self.timetoint(
+                                self.roundtime(
+                                    self.parsetime(
+                                        time.ctime(
+                                            time.time()
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                tmp=self.c2f(qeqeq['temp2m'],unit)
+                humd=None
+                precip=False if qeqeq['prec_type']=='none' else True
+                wind=qeqeq['wind10m']['speed']
+                windir=qeqeq['wind10m']['direction']
+                weather_as_dict[tm]=_7Timer.Weather(Wind(wind,windir),precip,tmp,humd,unit)
+                if qeqeq['timepoint']>=dnum*24:
+
+                    fcast.append(_7Timer.Day(list(weather_as_dict.values()),weather_as_dict))
+                    weather_as_dict={}
+                    dnum+=1
+                ltime=self.timetoint(tm)
+            return _7Timer.Forecast(fcast,ci,co)
+        
+        def splittime(self,time,after=int):
+            try:
+                return tuple(after(i) for i in time.split(':'))
+            except ValueError:
+                raise ValueError(
+                                f"invalid value for 'splittime':{time}"
+                                )
+        def fillin(self,time):
+            return self.jointime(self.formatsec(i) for i in  self.splittime(time,after=str))
+        def formatsec(self,time):
+            if len(str(time))>2:
+                raise ValueError('not 2-digit or 1-digit time')
+            if not time:
+                return ""
+            if len(str(time))<2:
+                return "0"+str(time)
+            
+            return time
+        def jointime(self,time):
+            return ':'.join(str(i) for i in time)
+        def gettemp(self,time):
+            if isinstance(time,str):
+                time=self.splittime(time)
+            return self.weather_as_dict[self.fillin(self.repairtime(self.jointime(time)))]
+        def timetoint(self,time):
+            if isinstance(time,str):
+                return (self.splittime(time)[1]+self.splittime(time)[0]*60)%1440
+            return (time[1]+time[0]*60)%1440
+        def inttotime(self,i):
+            return (i//60,i%60)
+
+        def repairtime(self,time):
+            closest=lambda num,collection:min(collection,key=lambda x:abs((x-num)+1))
+            dy=self.weather_as_dict
+
+            dy=[self.timetoint(time) for time in dy]
+            qr=self.timetoint(self.roundtime(time))
+            return self.jointime(self.inttotime(closest(qr,dy)))
+            
+        def roundtime(self,time):
+
+            mins=int(time.split(':')[-1])
+            if mins==0:
+                return time
+            hrs=int(time.split(':')[0])
+            if mins<50:
+                return f'{self.formatsec(hrs)}:00'
+            return f'{self.formatsec(hrs+1)}:00'
+
+        def mktime(self,time):
+            return self.fillin(self.jointime(self.inttotime(self.timetoint(time))))
+
+
+
+            
+        def parsetime(self,time):
+            pattern=re.compile('(\d{2}\:\d{2})\:\d{2}')
+            return pattern.search(time).group(1)
+        def parseday(self,time):
+            pattern=re.compile('\d{4}-\d{2}-(\d{2})')
+            return pattern.search(time).group(1)
+        def c2f(self,fah,unit=CELSIUS):
+            if unit==FAHRENHEIT:
+                return tu(fah,'C','F').doconnvert()
+            return fah
+
+             
+    def forecast(self,cityname=CITY,countryname=COUNTRY,unit=None):
+        '''Gets forecast'''
+        err=None
         if not countryname:
             try:
                 countryname=getcountry(cityname)
@@ -701,21 +1127,22 @@ class _YR_NORI:
                 unit=FAHRENHEIT
             else:
                 unit=CELSIUS
-        if countryname==_DONTCHECK:
-            query=f'weather {cityname}'
+        if cityname==CITY and countryname==COUNTRY:
+            lat,lon=LOCATION.lat,LOCATION.lon
         else:
-            query=f'{cityname} {countryname}'
-        c=self.search(query).first.split('/')
-        c[5]="hourly-table"
-        print('/'.join(c))
-        try:
-            self.driver.find_elements_by_class_name("feature-promo-modal-meteogram__link")[0].click()
-        except:pass
-        return self.ForecastParser.parse(self.driver,'/'.join(c))
+            loct=locator.geocode(f'{cityname},{countryname}')
+            lat,lon=loct.latitude,loct.longitude
+        apiurl=f'https://www.7timer.info/bin/astro.php?lon={lon}&lat={lat}&ac=0&lang=en&unit=metric&output=json&tzshift=0'        
+        return self.ForecastParser.parse(BetaChrome().request(apiurl)[1],unit,cityname,countryname)
+    ForecastParser=_ForecastParser()
+
 class _driverSearch:
     '''Search drivers'''
-    def __init__(self):
-        
+    def __init__(self,throw=False):
+        if throw:
+             debugger.debug("Lost connection to the driver,attempting reconnect...","ERROR")
+
+        debugger.debug("initialized driver search")
         self.browsers=[Chrome,Firefox,Safari,Ie,Edge,PhantomJS]
         self.reprs={repr(i):i for i in self.browsers}
         '''If it is possible, initiate in headless mode'''
@@ -736,7 +1163,9 @@ class _driverSearch:
         del hopt
         if ('.weather')not  in os.listdir():
             os.mkdir('.weather')
+        debugger.debug("Getting browser avaliability data")
         if ('aval') not in os.listdir('.weather'):
+            debugger.debug("Avaliability data not in cache!","WARNING")
             chrome_aval=False
             firefox_aval=False
             safari_aval=False
@@ -776,8 +1205,10 @@ class _driverSearch:
                 res=[]
                 for i,j in self.aval:
                     res.append([repr(i),j])
+                debugger.debug("Json dumping data")
                 json.dump(res,f)
         else:
+            debugger.debug("Loading data from cache")
             with open('.weather/aval')as f:
                 try:
                     self.aval=json.load(f)
@@ -796,7 +1227,7 @@ class _driverSearch:
             raise DriverError(
                 '''None of web drivers installed. 
                     Check https://jenca-adam.github.io/projects/weather/docs.html#special_requirements .
-                    Alternatively, you can use weather.NOAA instead of weather.google .
+                    Alternatively, you can use weather.yrno instead of weather.google .
                 ''')
     def _checkin(self,a,b,index=0):
         for i in a:
@@ -812,11 +1243,15 @@ class _driverSearch:
         for i in self.headlessopt:
             if i[0]==dr:
                 return i[1]
-    def best(self):
+    def best(self,reload=False):
+        debugger.debug("Getting best driver")
         '''Get best driver'''
-        if '.weather' not in os.listdir():
+        if '.weather' not in os.listdir() or reload:
+            if '.weather' not in os.listdir():
+                debugger.debug("Could not load data from cache, parsing manually","WARNING")
             os.mkdir('.weather')
             hdlsxst=False
+            
             for b in self.browsers:
                 if self._checkin(self.headlessopt,b):
                     hdlsxst=True
@@ -837,6 +1272,8 @@ class _driverSearch:
                         return b(options=self._gethopt(b))
                     return b()
         elif 'browser' not in os.listdir('.weather'):
+            debugger.debug("Could not load data from cache, parsing manually","WARNING")
+
             hdlsxst=False
             for b in self.browsers:
                 if self._checkin(self.headlessopt,b):
@@ -858,6 +1295,7 @@ class _driverSearch:
                         return b(options=self._gethopt(b))
                     return b()
         else:
+            debugger.debug("loading data from cache")
             cont=open('.weather/browser').read()
             b=self.reprs[cont]
             if self._checkin(self.headlessopt,b):
@@ -894,13 +1332,16 @@ class _SetterUp:
     CHROMEDRIVER_INSTALL=os.path.join(INSTALL_DIR,CHROMEDRIVER_URL.split('/')[-1])
     GECKODRIVER_INSTALL=os.path.join(INSTALL_DIR,GECKODRIVER_URL.split('/')[-1])
     def install_cdr(self):
-        
+        debugger.debug("Installing chromedriver")
         h=Http()
+        debugger.debug("Downloading chromedriver")
         r,content=h.request(self.CHROMEDRIVER_URL)
+        
         with open(self.CHROMEDRIVER_INSTALL,'wb')as f:
             f.write(content)
         os.chmod(self.CHROMEDRIVER_INSTALL,0o777)
     def install_gecko(self):
+        debugger.debug("Installing geckodriver")
         h=Http()
         r,content=h.request(self.GECKODRIVER_URL)
         with open(self.GECKODRIVER_INSTALL,'wb')as f:
@@ -908,6 +1349,7 @@ class _SetterUp:
         os.chmod(self.GECKODRIVER_INSTALL,0o777)
 
     def setup(self,drivers=['chromedriver','geckodriver']):
+        debugger.debug("setting up")
         if not drivers:
             raise SetupError('please specify at least one driver')
         chopt=chrome.options.Options()
@@ -965,8 +1407,6 @@ class _cukor:
             ,{
                 'result':result})
         return result
-
-                    
                 
 
 
@@ -1003,36 +1443,104 @@ class parser:
                 raise self.ParsingError(
                 "not a valid time -- second int is larger than first")
             return f+d
+
 class _Avg:
     '''get best forecast result'''
-    SVC=['google']
+    SVC=['yrno','google','7timer']
     def forecast(self,*a,**k):
         for service in self.SVC:
+            debugger.debug(f"running service \"{service}\"")
             try:
                 return SERVICES[service].forecast(*a,**k)
             except KeyboardInterrupt:
                 raise SetupError("lost connection to service")
             except urllib3.exceptions.MaxRetryError:
-                raise DriverError(
+                try:
+                    debugger.debug("Lost connection to the driver,attempting reconnect...","ERROR")
+                    importlib.reload(selenium)
+                    return service.forecast(cityname,countryname,unit)
+                except urllib3.exceptions.MaxRetryError:
+                    raise DriverError(
                                   """Because of unknown error in Selenium was lost connection to driver.
                                      Consider restarting your script/module"""
                                      )
-            except WeatherError:
-                pass
+
+            except WeatherError as e:
+                
+                if e==NoSuchCityError:
+                    raise
+                debugger.debug(f'service \"{service}\" does not recognise place',"ERROR")
             except selenium.common.exceptions.WebDriverException:
                 raise DriverError(
                                  """Could not set up the driver, probably keyboard interrupt?"""
                                  )
-            except Exception:
-                if e.__class__==KeyboardInterrupt:
+            except Exception as e:
+                
+                if e==KeyboardInterrupt:
                     raise KeyboardInterrupt("interrupted while searching for forecast")
+                raise
         raise WeatherError("could not find service matching your search")
 parser=parser()
 google=_WeatherChannel()
 yrno=_YR_NORI()
 setup=_SetterUp()
 average=_Avg()
-SERVICES={'google':google}
-def forecast(service=average):
-    return service.forecast()
+debugger=_debugger()
+f7timer=_7Timer()
+dumper=_fcdumper()
+DEBUG=False
+debugger.debug=debugger.debug
+SERVICES={'google':google,'yrno':yrno,'metno':yrno,'7timer':f7timer}
+def fix(svc):
+    fxd = difflib.get_close_matches(svc,SERVICES.keys(),n=1,cutoff=0.7)
+    if len(fxd)>0:
+        return fxd[0]
+    else:
+        return svc
+def forecast(cityname=CITY,countryname=COUNTRY,unit=None,service=average,debug=False):
+    global DEBUG,selenium
+    DEBUG=debug
+    if isinstance(service,str):
+        try:
+            service=SERVICES[service]
+        except KeyError:
+            afms=""
+            excm="!"
+            if fix(service)!=service:
+                excm="?"
+                afms=f", did you mean {fix(service)!r}"
+            raise UnknownServiceError(f'unknown service : {service!r}{afms}{excm}') 
+    debugger.debug("Debugger has started","INFO")
+    if service==average:
+        return service.forecast(cityname,countryname,unit)
+    else:
+        try:
+            return service.forecast(cityname,countryname,unit)
+        except KeyboardInterrupt:
+                raise SetupError("lost connection to service")
+        except urllib3.exceptions.MaxRetryError:
+            debugger.debug("Lost connection to the driver,attempting reconnect...","ERROR")
+
+            try:
+                return service.forecast(cityname,countryname,unit,driver=_driverSearch(throw=True).best())
+            except urllib3.exceptions.MaxRetryError:
+                raise DriverError(
+                              """Because of unknown error in Selenium was lost connection to driver.
+                                 Consider restarting your script/module"""
+                                 )
+        except WeatherError as e:
+            
+            if e==NoSuchCityError:
+                raise
+            debugger.debug(f'service \"{service}\" does not recognise place',"ERROR")
+        except selenium.common.exceptions.WebDriverException:
+            raise DriverError(
+                             """Could not set up the driver, probably keyboard interrupt?"""
+                             )
+        except Exception as e:
+            
+            if e==KeyboardInterrupt:
+                raise KeyboardInterrupt("interrupted while searching for forecast")
+            raise
+
 

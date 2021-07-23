@@ -1,0 +1,23 @@
+status: 301
+location: https://www.google.com/search?q=weather%20Bratislava%20Slovensko
+content-type: text/html; charset=UTF-8
+bfcache-opt-in: unload
+date: Fri, 23 Jul 2021 18:57:12 GMT
+expires: Fri, 23 Jul 2021 18:57:12 GMT
+cache-control: private, max-age=2592000
+server: gws
+content-length: 261
+x-xss-protection: 0
+x-frame-options: SAMEORIGIN
+set-cookie: CONSENT=PENDING+490; expires=Fri, 01-Jan-2038 00:00:00 GMT; path=/; domain=.google.com; Secure
+p3p: CP="This is not a P3P policy! See g.co/p3phelp for more info."
+alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-T051=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443"; ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+-x-permanent-redirect-url: https://www.google.com/search?q=weather%20Bratislava%20Slovensko
+content-location: https://google.com/search?q=weather%20Bratislava%20Slovensko
+
+<HTML><HEAD><meta http-equiv="content-type" content="text/html;charset=utf-8">
+<TITLE>301 Moved</TITLE></HEAD><BODY>
+<H1>301 Moved</H1>
+The document has moved
+<A HREF="https://www.google.com/search?q=weather%20Bratislava%20Slovensko">here</A>.
+</BODY></HTML>
