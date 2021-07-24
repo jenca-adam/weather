@@ -1,5 +1,4 @@
 import json
-
 import urllib3
 from bs4 import BeautifulSoup as bs
 from httplib2 import Http
@@ -23,6 +22,8 @@ import importlib
 import difflib
 from unitconvert.temperatureunits import TemperatureUnit as tu
 from lxml import etree
+import locale
+import langdetect
 '''Python library for getting weather from different sources.
 Example:
 >>> import weather
@@ -36,7 +37,7 @@ Example:
 '''
 #__OWM_TOKEN="84e57133df9ae058f3e26f7e60ae5cad"
 DEBUG=False
-locator=Nominatim(user_agent="geoapiExercises")
+locator=Nominatim(user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36")
 _h=Http('.cache')
 CELSIUS=0
 UNIT=CELSIUS
@@ -44,6 +45,26 @@ FAHRENHEIT=1
 _DONTCHECK=-1
 '''Google chrome headers, used in BetaChrome'''
 _HDR={"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36"}
+_URL="https://translate.googleapis.com/translate_a/single?client=gtx&ie={pe}&oe={pe}dt=bd&dt=ex&dt=ld&dt=md&dt=rw&dt=rm&dt=ss&dt=t&dt=at&dt=qc&sl={sl}&tl={tl}&hl={tl}&q={string}"
+class TooManyRequestsError(ValueError):pass
+class Translator:
+    def __init__(self,sl,tl):
+        self._pe=locale.getpreferredencoding()
+        self._h=httplib2.Http('.cache')
+        self.sl=sl
+        self.tl=tl
+    def translate(self,string):
+        if self.sl is None:
+            self.sl=langdetect.detect(string)
+        u=_URL.format(pe=self._pe,sl=self.sl,tl=self.tl,string=string)
+        resp,c=self._h.request(u)
+        if resp.status==419:
+            raise TooManyRequestsError('server replied 419. Try again later')
+        return json.loads(c.decode(self._pe))[0][0][0]
+
+def translate(string,sl=None,tl='en'):
+    t=Translator(sl,tl)
+    return t.translate(string)
 class _debugger:
     class BadStatus(Exception):pass
     def debug(self,text,status="INFO"):
@@ -118,12 +139,41 @@ class DirectionError(WindError):
     '''
     Raised when direction is not "N","NE","E","SE","S","SW","W" or "NW"(if it is a string) or higher than 360(if it is a integer)
     '''
+class _fastener:
+    def __init__(self):
+        os.makedirs('.cache/weather/',exist_ok=True)
+        if not os.path.exists('.cache/weather/citycountry.json'):
+            self.file=open('.cache/weather/citycountry.json','w')
+            self.file.write('{}')
+            self.file.close()
+        self.file=open('.cache/weather/citycountry.json')
+        self.data=json.load(self.file)
+    def dump(self):
+        c=open('.cache/weather/citycountry.json','w')
+        json.dump(self.data,c)
+        c.close()
+
+    
+    def isrg(self,city):
+        return city in self.data
+    def register(self,city,country):
+        self.data[city]=country
+        self.dump()
+    def getcountry(self,city):
+        if self.isrg(city):
+            return self.data[city]
+        else:
+            country=_getcountry(city)
+            self.register(city,country)
+            return country
+
 def searchurl(query):
     '''Returns Google Search URL according to query'''  
     return f'https://google.com/search?q={query}'
-def getcountry(city):
+def _getcountry(city):
     '''Return country that city is located in''' 
-    return locator.geocode(city).address.split(',')[-1][1:]
+    a=locator.geocode(city).address.split(',')[-1].strip()
+    return translate(a)
 def _rq(h,u):
     '''Handles IpApi ConnectionResetError'''
     try:
@@ -328,10 +378,36 @@ class _fcdumper:
             weather_as_dict[tm]=srcsvc.__class__.Weather(Wind(wind,wdirct),precip,temp,humid,unit)
             cdix=dix
         return srcsvc.__class__.Forecast(forecast,city,country)
+class _cacher:
+    def __init__(self):
+        os.makedirs('.cache/weather/fc/xml',exist_ok=True)
+    def iscached(self,cityname,ctr):
+        pt=f'.cache/weather/fc/xml/{ctr}/{cityname}/'
+        return os.path.exists(pt) and os.listdir(pt)
+    def getcached(self,city,ctr):
+        if not self.iscached(city,ctr):
+            return []
+        pt=f'.cache/weather/fc/xml/{ctr}/{city}/'
+        t=time.time()
+        ress=[]
+        for file in os.listdir(pt):
+            rt=int(file)
+            if -1<t-rt<3600:
+                ress.append(os.path.join(pt,file))
+
+        return ress
+    def cache(self,forecast):
+        pt=f'.cache/weather/fc/xml/{forecast.country}/{forecast.city}/'
+        os.makedirs(pt,exist_ok=True)
+
+        dumper.dump(forecast,os.path.join(pt,str(int(time.time()))))
 
 
         
 
+    
+
+        
 class _WeatherChannel:
     '''weather.google type'''
     def __init__(self):
@@ -708,6 +784,12 @@ class _WeatherChannel:
                 unit=FAHRENHEIT
             else:
                 unit=CELSIUS
+        ca=cacher.getcached(cityname,countryname)
+        
+        for caf in ca:
+            foc=dumper.load(caf)
+            if isinstance(foc,self.__class__.Forecast):
+                return foc
         if countryname==_DONTCHECK:
             query=f'weather {cityname}'
         else:
@@ -721,7 +803,9 @@ class _WeatherChannel:
             tempnow=int(soup.body.find_all('span',class_="wob_t")[unit].text)
             fli=soup.body.find('div',id="wob_dp")
         
-            return self.parsefcast(svg,tempnow,unit,cityname,countryname)
+            foc=self.parsefcast(svg,tempnow,unit,cityname,countryname)
+            cacher.cache(foc)
+            return foc
         except Exception as e:
             debugger.debug(f"could not load forecast for {cityname}, trying without country","ERROR")
             err=WeatherError(f"could not get forecast for city {cityname}({str(e)} throwed)")
@@ -860,7 +944,9 @@ class _YR_NORI:
                         fcast.append(_YR_NORI.Day(list(weather_as_dict.values()),weather_as_dict))
                         weather_as_dict={}
                 lastday=dy
-            return _YR_NORI.Forecast(fcast,ci,co)
+            foc= _YR_NORI.Forecast(fcast,ci,co)
+            cacher.cache(foc)
+            return foc
 
         def close_ad(self,driver):
             '''Closes "We have a new graph" pop-up'''
@@ -893,10 +979,12 @@ class _YR_NORI:
         results=results.findAll('li')
         results=[self.expandhref(result.a['href']) for result in results]
         return self.SearchResults(results) 
-    def forecast(self,cityname=CITY,countryname=COUNTRY,unit=None):
+    def forecast(self,cityname=CITY,countryname=None,unit=None):
         '''Gets forecast'''
         err=None
         if not countryname:
+            if cityname==CITY:
+                countryname=COUNTRY
             try:
                 countryname=getcountry(cityname)
             except AttributeError:
@@ -905,6 +993,13 @@ class _YR_NORI:
             raise err
         if cityname==CITY and not countryname:
             countryname=COUNTRY
+        ca=cacher.getcached(cityname,countryname)
+        
+        for caf in ca:
+            foc=dumper.load(caf)
+            if isinstance(foc,self.__class__.Forecast):
+                return foc
+
         if cityname==CITY and countryname==COUNTRY:
             lat,lon=LOCATION.lat,LOCATION.lon
         else:
@@ -915,6 +1010,7 @@ class _YR_NORI:
                 unit=FAHRENHEIT
             else:
                 unit=CELSIUS
+
         apiurl=f'https://api.met.no/weatherapi/locationforecast/2.0/compact?lat={lat}&lon={lon}'        
         return self.ForecastParser.parse(BetaChrome().request(apiurl)[1],unit,cityname,countryname)
 class _7Timer:
@@ -1041,7 +1137,9 @@ class _7Timer:
                     weather_as_dict={}
                     dnum+=1
                 ltime=self.timetoint(tm)
-            return _7Timer.Forecast(fcast,ci,co)
+            foc= _7Timer.Forecast(fcast,ci,co)
+            cacher.cache(foc)
+            return foc
         
         def splittime(self,time,after=int):
             try:
@@ -1132,6 +1230,13 @@ class _7Timer:
         else:
             loct=locator.geocode(f'{cityname},{countryname}')
             lat,lon=loct.latitude,loct.longitude
+        ca=cacher.getcached(cityname,countryname)
+        
+        for caf in ca:
+            foc=dumper.load(caf)
+            if isinstance(foc,self.__class__.Forecast):
+                return foc
+
         apiurl=f'https://www.7timer.info/bin/astro.php?lon={lon}&lat={lat}&ac=0&lang=en&unit=metric&output=json&tzshift=0'        
         return self.ForecastParser.parse(BetaChrome().request(apiurl)[1],unit,cityname,countryname)
     ForecastParser=_ForecastParser()
@@ -1161,10 +1266,10 @@ class _driverSearch:
         headlessopt=hopt
         self.headlessopt=[[Chrome,headlessopt[0]],[Firefox,headlessopt[1]],[Ie,headlessopt[2]]]
         del hopt
-        if ('.weather')not  in os.listdir():
-            os.mkdir('.weather')
+        if ('.cache/weather')not  in os.listdir():
+            os.makedirs('.cache/weather',exist_ok=True)
         debugger.debug("Getting browser avaliability data")
-        if ('aval') not in os.listdir('.weather'):
+        if ('aval') not in os.listdir('.cache/weather'):
             debugger.debug("Avaliability data not in cache!","WARNING")
             chrome_aval=False
             firefox_aval=False
@@ -1180,10 +1285,9 @@ class _driverSearch:
                 try:
                     f=Firefox()
                     f.quit()
-                    ffx_aval=True
+                    firefox_aval=True
                 except:
 
-                
                     try:        
                         s=Safari()
                         s.quit()
@@ -1201,7 +1305,7 @@ class _driverSearch:
                             except:pass
 
             self.aval=[[Chrome,chrome_aval],[Firefox,firefox_aval],[Safari,safari_aval],[Ie,ie_aval],[PhantomJS,pjs_aval]]
-            with open('.weather/aval','w')as f:
+            with open('.cache/weather/aval','w')as f:
                 res=[]
                 for i,j in self.aval:
                     res.append([repr(i),j])
@@ -1209,12 +1313,12 @@ class _driverSearch:
                 json.dump(res,f)
         else:
             debugger.debug("Loading data from cache")
-            with open('.weather/aval')as f:
+            with open('.cache/weather/aval')as f:
                 try:
                     self.aval=json.load(f)
                 except:
                     raise WeatherError(
-                    'Could not get browser avaliability data because file .weather/aval is malformed, maybe try to delete it?'
+                    'Could not get browser avaliability data because file .cache/weather/aval is malformed, maybe try to delete it?'
                     )
             result=[]
             for i in self.aval:
@@ -1238,7 +1342,7 @@ class _driverSearch:
         for i in self.aval:
             if i[0]==dr and i[1]:
                 return True
-        return True
+        return False
     def _gethopt(self,dr):
         for i in self.headlessopt:
             if i[0]==dr:
@@ -1246,10 +1350,10 @@ class _driverSearch:
     def best(self,reload=False):
         debugger.debug("Getting best driver")
         '''Get best driver'''
-        if '.weather' not in os.listdir() or reload:
-            if '.weather' not in os.listdir():
+        if '.cache/weather' not in os.listdir() or reload:
+            if '.cache/weather' not in os.listdir():
                 debugger.debug("Could not load data from cache, parsing manually","WARNING")
-            os.mkdir('.weather')
+            os.makedirs('.cache/weather',exist_ok=True)
             hdlsxst=False
             
             for b in self.browsers:
@@ -1266,12 +1370,12 @@ class _driverSearch:
                                     )
             for b in self.browsers:
                 if  self._isaval(b):
-                    with open('.weather/browser','w') as f:
+                    with open('.cache/weather/browser','w') as f:
                         f.write(repr(b))
                     if self._checkin(self.headlessopt,b):
                         return b(options=self._gethopt(b))
                     return b()
-        elif 'browser' not in os.listdir('.weather'):
+        elif 'browser' not in os.listdir('.cache/weather'):
             debugger.debug("Could not load data from cache, parsing manually","WARNING")
 
             hdlsxst=False
@@ -1319,13 +1423,12 @@ class _SetterUp:
     if '.local' not in os.listdir(HOME):
         p=os.getcwd()
         os.chdir(HOME)
-        os.mkdir('.local')
-        os.mkdir('.local/bin')
+        os.makedirs('.local/bin')
         os.chdir(p)
     elif 'bin' not in os.listdir(os.path.join(HOME,'.local')):
         p=os.getcwd()
         os.chdir(HOME)
-        os.mkdir('.local/bin')
+        os.makedirs('.local/bin')
         os.chdir(p)
     if INSTALL_DIR not in os.environ["PATH"].split(os.pathsep):
         os.environ["PATH"]+=os.pathsep+INSTALL_DIR
@@ -1490,6 +1593,9 @@ f7timer=_7Timer()
 dumper=_fcdumper()
 DEBUG=False
 debugger.debug=debugger.debug
+cacher=_cacher()
+fastener=_fastener()
+getcountry=fastener.getcountry
 SERVICES={'google':google,'yrno':yrno,'metno':yrno,'7timer':f7timer}
 def fix(svc):
     fxd = difflib.get_close_matches(svc,SERVICES.keys(),n=1,cutoff=0.7)
@@ -1497,7 +1603,7 @@ def fix(svc):
         return fxd[0]
     else:
         return svc
-def forecast(cityname=CITY,countryname=COUNTRY,unit=None,service=average,debug=False):
+def forecast(cityname=CITY,countryname=None,unit=None,service=average,debug=False):
     global DEBUG,selenium
     DEBUG=debug
     if isinstance(service,str):

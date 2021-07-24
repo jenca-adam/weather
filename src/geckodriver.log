@@ -168,3 +168,211 @@ console.warn: SearchSettings: "get: No settings file exists, new profile?" (new 
 1623527683110	Marionette	INFO	Stopped listening on port 45295
 1623527683111	Marionette	INFO	Stopped listening on port 34891
 1623527683115	Marionette	INFO	Stopped listening on port 46399
+1627132492982	geckodriver	INFO	Listening on 127.0.0.1:44563
+1627132493990	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilekjWfeU"
+1627132494962	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilekjWfeU/search.json.mozlz4", (void 0)))
+1627132496892	Marionette	INFO	Listening on port 38081
+1627132496936	Marionette	WARN	TLS certificate errors will be ignored for this session
+1627132496975	Marionette	INFO	Stopped listening on port 38081
+console.error: services.settings: 
+  main/message-groups Signature failed  TypeError: NetworkError when attempting to fetch resource.
+1627132558959	geckodriver	INFO	Listening on 127.0.0.1:33539
+1627132558964	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileDCVsVU"
+1627132559589	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileDCVsVU/search.json.mozlz4", (void 0)))
+1627132560998	Marionette	INFO	Listening on port 36609
+1627132561096	Marionette	WARN	TLS certificate errors will be ignored for this session
+1627132561111	Marionette	INFO	Stopped listening on port 36609
+JavaScript error: , line 0: AbortError: A request was aborted, for example through a call to IDBTransaction.abort.
+1627132839277	geckodriver	INFO	Listening on 127.0.0.1:57735
+1627132839279	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilea5ftUW"
+*** You are running in headless mode.
+1627132839635	Marionette	INFO	Marionette enabled
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilea5ftUW/search.json.mozlz4", (void 0)))
+1627132840770	Marionette	INFO	Listening on port 40157
+1627132840797	Marionette	WARN	TLS certificate errors will be ignored for this session
+1627132840813	geckodriver	INFO	Listening on 127.0.0.1:55713
+1627132840816	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilemxTKJa"
+*** You are running in headless mode.
+1627132841176	Marionette	INFO	Marionette enabled
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilemxTKJa/search.json.mozlz4", (void 0)))
+1627132842241	Marionette	INFO	Listening on port 41917
+1627132842378	Marionette	WARN	TLS certificate errors will be ignored for this session
+1627132902320	geckodriver	INFO	Listening on 127.0.0.1:39479
+1627132902322	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileWzU93U"
+*** You are running in headless mode.
+1627132902629	Marionette	INFO	Marionette enabled
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileWzU93U/search.json.mozlz4", (void 0)))
+1627132903669	Marionette	INFO	Listening on port 38165
+1627132903741	Marionette	WARN	TLS certificate errors will be ignored for this session
+1627132903754	geckodriver	INFO	Listening on 127.0.0.1:60787
+1627132903756	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileeIueni"
+*** You are running in headless mode.
+1627132904124	Marionette	INFO	Marionette enabled
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileeIueni/search.json.mozlz4", (void 0)))
+1627132905155	Marionette	INFO	Listening on port 35519
+1627132905178	Marionette	WARN	TLS certificate errors will be ignored for this session
+1627132911717	geckodriver	INFO	Listening on 127.0.0.1:36957
+1627132911720	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileRxVYXa"
+1627132912393	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileRxVYXa/search.json.mozlz4", (void 0)))
+1627132914144	Marionette	INFO	Listening on port 43651
+1627132914249	Marionette	WARN	TLS certificate errors will be ignored for this session
+1627132914265	Marionette	INFO	Stopped listening on port 43651
+1627132956297	geckodriver	INFO	Listening on 127.0.0.1:32819
+1627132956321	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilee6SbLy"
+1627132956857	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilee6SbLy/search.json.mozlz4", (void 0)))
+1627132958317	Marionette	INFO	Listening on port 45949
+1627132958357	Marionette	WARN	TLS certificate errors will be ignored for this session
+1627132966329	Marionette	INFO	Stopped listening on port 45949
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1627132993375	geckodriver	INFO	Listening on 127.0.0.1:34715
+1627132993379	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileLfC5RQ"
+1627132994019	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileLfC5RQ/search.json.mozlz4", (void 0)))
+1627132995661	Marionette	INFO	Listening on port 37803
+1627132995718	Marionette	WARN	TLS certificate errors will be ignored for this session
+1627132995733	Marionette	INFO	Stopped listening on port 37803
+1627133037987	geckodriver	INFO	Listening on 127.0.0.1:60755
+1627133037990	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilevk9Wzu"
+1627133038622	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilevk9Wzu/search.json.mozlz4", (void 0)))
+1627133040050	Marionette	INFO	Listening on port 42775
+1627133040128	Marionette	WARN	TLS certificate errors will be ignored for this session
+1627133040147	Marionette	INFO	Stopped listening on port 42775
+console.error: services.settings: 
+  main/doh-providers Signature failed  InvalidSignatureError: Invalid content signature (main/doh-providers)
+console.error: services.settings: 
+  main/doh-providers local data was corrupted
+console.warn: services.settings: main/doh-providers Signature verified failed. Retry from scratch
+console.error: services.settings: 
+  main/doh-config Signature failed  InvalidSignatureError: Invalid content signature (main/doh-config)
+console.error: services.settings: 
+  main/doh-config local data was corrupted
+console.warn: services.settings: main/doh-config Signature verified failed. Retry from scratch
+console.error: services.settings: 
+  main/doh-providers Signature failed  InvalidSignatureError: Invalid content signature (main/doh-providers)
+console.error: services.settings: 
+  main/doh-providers local data was corrupted
+console.warn: services.settings: main/doh-providers Signature verified failed. Retry from scratch
+console.error: services.settings: 
+  main/doh-config Signature failed  InvalidSignatureError: Invalid content signature (main/doh-config)
+console.error: services.settings: 
+  main/doh-config local data was corrupted
+console.warn: services.settings: main/doh-config Signature verified failed. Retry from scratch
+1627133122674	geckodriver	INFO	Listening on 127.0.0.1:42763
+1627133122693	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileVcuGri"
+*** You are running in headless mode.
+1627133123022	Marionette	INFO	Marionette enabled
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileVcuGri/search.json.mozlz4", (void 0)))
+1627133124031	Marionette	INFO	Listening on port 34707
+1627133124128	Marionette	WARN	TLS certificate errors will be ignored for this session
+1627133137667	geckodriver	INFO	Listening on 127.0.0.1:45951
+1627133137680	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileePJYv8"
+*** You are running in headless mode.
+1627133138005	Marionette	INFO	Marionette enabled
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileePJYv8/search.json.mozlz4", (void 0)))
+1627133139004	Marionette	INFO	Listening on port 44401
+1627133139108	Marionette	WARN	TLS certificate errors will be ignored for this session
+console.error: services.settings: 
+  main/doh-providers Signature failed  InvalidSignatureError: Invalid content signature (main/doh-providers)
+console.error: services.settings: 
+  main/doh-providers local data was corrupted
+console.warn: services.settings: main/doh-providers Signature verified failed. Retry from scratch
+console.error: services.settings: 
+  main/doh-config Signature failed  InvalidSignatureError: Invalid content signature (main/doh-config)
+console.error: services.settings: 
+  main/doh-config local data was corrupted
+console.warn: services.settings: main/doh-config Signature verified failed. Retry from scratch
+console.error: services.settings: 
+  main/doh-providers Signature failed  InvalidSignatureError: Invalid content signature (main/doh-providers)
+console.error: services.settings: 
+  main/doh-providers local data was corrupted
+console.warn: services.settings: main/doh-providers Signature verified failed. Retry from scratch
+console.error: services.settings: 
+  main/doh-config Signature failed  InvalidSignatureError: Invalid content signature (main/doh-config)
+console.error: services.settings: 
+  main/doh-config local data was corrupted
+console.warn: services.settings: main/doh-config Signature verified failed. Retry from scratch
+1627133178613	geckodriver	INFO	Listening on 127.0.0.1:44641
+1627133178632	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilecSYxND"
+*** You are running in headless mode.
+1627133178965	Marionette	INFO	Marionette enabled
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilecSYxND/search.json.mozlz4", (void 0)))
+1627133179969	Marionette	INFO	Listening on port 40417
+1627133180081	Marionette	WARN	TLS certificate errors will be ignored for this session
+console.log: WebExtensions: reset-default-search: starting.
+console.log: WebExtensions: reset-default-search: No addons in our list are installed.
+console.log: WebExtensions: reset-default-search: starting.
+console.log: WebExtensions: reset-default-search: No addons in our list are installed.
+1627133280773	geckodriver	INFO	Listening on 127.0.0.1:58015
+1627133280792	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilewa32W9"
+*** You are running in headless mode.
+1627133281130	Marionette	INFO	Marionette enabled
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilewa32W9/search.json.mozlz4", (void 0)))
+1627133282129	Marionette	INFO	Listening on port 43733
+1627133282213	Marionette	WARN	TLS certificate errors will be ignored for this session
+console.log: WebExtensions: reset-default-search: starting.
+console.log: WebExtensions: reset-default-search: No addons in our list are installed.
+console.log: WebExtensions: reset-default-search: starting.
+console.log: WebExtensions: reset-default-search: No addons in our list are installed.
+console.error: services.settings: 
+  main/doh-providers Signature failed  InvalidSignatureError: Invalid content signature (main/doh-providers)
+console.error: services.settings: 
+  main/doh-providers local data was corrupted
+console.warn: services.settings: main/doh-providers Signature verified failed. Retry from scratch
+console.error: services.settings: 
+  main/doh-config Signature failed  InvalidSignatureError: Invalid content signature (main/doh-config)
+console.error: services.settings: 
+  main/doh-config local data was corrupted
+console.warn: services.settings: main/doh-config Signature verified failed. Retry from scratch
+console.error: services.settings: 
+  main/doh-providers Signature failed  InvalidSignatureError: Invalid content signature (main/doh-providers)
+console.error: services.settings: 
+  main/doh-providers local data was corrupted
+console.warn: services.settings: main/doh-providers Signature verified failed. Retry from scratch
+console.error: services.settings: 
+  main/doh-config Signature failed  InvalidSignatureError: Invalid content signature (main/doh-config)
+console.error: services.settings: 
+  main/doh-config local data was corrupted
+console.warn: services.settings: main/doh-config Signature verified failed. Retry from scratch
+console.error: services.settings: 
+  main/doh-providers Signature failed  InvalidSignatureError: Invalid content signature (main/doh-providers)
+console.error: services.settings: 
+  main/doh-providers local data was corrupted
+console.warn: services.settings: main/doh-providers Signature verified failed. Retry from scratch
+console.error: services.settings: 
+  main/doh-config Signature failed  InvalidSignatureError: Invalid content signature (main/doh-config)
+console.error: services.settings: 
+  main/doh-config local data was corrupted
+console.warn: services.settings: main/doh-config Signature verified failed. Retry from scratch
+console.log: WebExtensions: reset-default-search: starting.
+console.log: WebExtensions: reset-default-search: No addons in our list are installed.
+console.log: WebExtensions: reset-default-search: starting.
+console.log: WebExtensions: reset-default-search: No addons in our list are installed.
+console.error: services.settings: 
+  main/doh-providers Signature failed  InvalidSignatureError: Invalid content signature (main/doh-providers)
+console.error: services.settings: 
+  main/doh-providers local data was corrupted
+console.warn: services.settings: main/doh-providers Signature verified failed. Retry from scratch
+console.error: services.settings: 
+  main/doh-config Signature failed  InvalidSignatureError: Invalid content signature (main/doh-config)
+console.error: services.settings: 
+  main/doh-config local data was corrupted
+console.warn: services.settings: main/doh-config Signature verified failed. Retry from scratch
+console.log: WebExtensions: reset-default-search: starting.
+console.log: WebExtensions: reset-default-search: No addons in our list are installed.
+console.log: WebExtensions: reset-default-search: starting.
+console.log: WebExtensions: reset-default-search: No addons in our list are installed.
