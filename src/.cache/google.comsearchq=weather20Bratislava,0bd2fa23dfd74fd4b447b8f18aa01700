@@ -2,14 +2,14 @@ status: 301
 location: https://www.google.com/search?q=weather%20Bratislava
 content-type: text/html; charset=UTF-8
 bfcache-opt-in: unload
-date: Thu, 22 Jul 2021 20:03:57 GMT
-expires: Thu, 22 Jul 2021 20:03:57 GMT
+date: Mon, 26 Jul 2021 13:59:48 GMT
+expires: Mon, 26 Jul 2021 13:59:48 GMT
 cache-control: private, max-age=2592000
 server: gws
 content-length: 249
 x-xss-protection: 0
 x-frame-options: SAMEORIGIN
-set-cookie: CONSENT=PENDING+028; expires=Fri, 01-Jan-2038 00:00:00 GMT; path=/; domain=.google.com; Secure
+set-cookie: CONSENT=PENDING+349; expires=Fri, 01-Jan-2038 00:00:00 GMT; path=/; domain=.google.com; Secure
 p3p: CP="This is not a P3P policy! See g.co/p3phelp for more info."
 alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-T051=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443"; ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
 -x-permanent-redirect-url: https://www.google.com/search?q=weather%20Bratislava

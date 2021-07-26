@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+if __name__=='__main__':
+    print('Importing module, please wait...\r',end='')
+
 import json
 import urllib3
 from bs4 import BeautifulSoup as bs
@@ -24,6 +28,14 @@ from unitconvert.temperatureunits import TemperatureUnit as tu
 from lxml import etree
 import locale
 import langdetect
+import argparse
+import art
+import termcolor
+import tabulate
+import calendar
+import datetime
+import termutils
+import getchlib
 '''Python library for getting weather from different sources.
 Example:
 >>> import weather
@@ -35,6 +47,7 @@ Example:
 >>> weather.forecast('Seoul').day(2)["16:00"].precip
 
 '''
+termcolor.COLORS={key:value+60 for key,value in termcolor.COLORS.items()}
 #__OWM_TOKEN="84e57133df9ae058f3e26f7e60ae5cad"
 DEBUG=False
 locator=Nominatim(user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36")
@@ -46,6 +59,32 @@ _DONTCHECK=-1
 '''Google chrome headers, used in BetaChrome'''
 _HDR={"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36"}
 _URL="https://translate.googleapis.com/translate_a/single?client=gtx&ie={pe}&oe={pe}dt=bd&dt=ex&dt=ld&dt=md&dt=rw&dt=rm&dt=ss&dt=t&dt=at&dt=qc&sl={sl}&tl={tl}&hl={tl}&q={string}"
+def dateadd1(date):
+    date=[date.year,date.month,date.day]
+    if date[-1]==calendar.monthrange(2021,date[1])[1]:
+        date[-1]=1
+        if date[1]==12:
+            date[1]=1
+            date[0]+=1
+        else:
+            date[1]+=1
+    else:
+        date[-1]+=1
+    return datetime.date(*date)
+def foc2t(foc):
+    u=makeunit(foc.today.weather_as_list[0].unit)
+    date=datetime.date.today()
+    dayc=0
+    table=[]
+    for day in foc.days:
+
+        for h in range(1,24):
+            weah=day[f'{h}:00']
+            table.append([str(date),f'{h}:00',str(weah.temp)+"°"+u,weah.precip,weah.humid,weah.wind.direction.direction,weah.wind.speed])
+        dayc+=1
+        date=dateadd1(date)
+    return tabulate.tabulate(table,['Date','Time',"Temperature",'Precipitation','Humidity','Wind direction','Wind speed'],tablefmt='fancy_grid')
+
 class TooManyRequestsError(ValueError):pass
 class Translator:
     def __init__(self,sl,tl):
@@ -166,7 +205,12 @@ class _fastener:
             country=_getcountry(city)
             self.register(city,country)
             return country
-
+def makeunit(u):
+    if u==CELSIUS:
+        return 'C'
+    elif u==FAHRENHEIT:
+        return "F"
+    return u
 def searchurl(query):
     '''Returns Google Search URL according to query'''  
     return f'https://google.com/search?q={query}'
@@ -214,6 +258,7 @@ class Direction:
                     )
         if ang is None:
             self.direction='UNKNOWN'
+            self.angle=None
             return
         if isinstance(ang,(int,float)):
             ang=int(ang)
@@ -251,6 +296,7 @@ class Wind():
     def __init__(self,speed=None,direction=None):
         self.direction=Direction(direction)
         self.speed=speed
+
 def _parse_loc(resp):
     '''Returns Location object from data returned by track''' 
     return Location(
@@ -295,6 +341,7 @@ def refresh(ip=''):
     return city,country
 class _fcdumper:
     def dump(self,forecast,file):
+        debugger.debug(f'Dumping data into {file!r}')
         if isinstance(forecast,_WeatherChannel.Forecast):
             source='google'
         elif isinstance(forecast,_YR_NORI.Forecast):
@@ -304,6 +351,7 @@ class _fcdumper:
         else:
             raise TypeError("bad forecast type")
         froot=etree.Element('forecast')
+        debugger.debug('Created root element')
         forelem=etree.SubElement(froot,'location')
         cityelem=etree.SubElement(forelem,'city')
         countryelem=etree.SubElement(forelem,'country')
@@ -317,10 +365,12 @@ class _fcdumper:
         root=etree.SubElement(froot,'days')
                  
         dind=0
+        debugger.debug('iterating days')
         for d in forecast.days:
             delem=etree.SubElement(root,'day',index=str(dind))
-            
+            debugger.debug(f'iterating weather for day {dind}')
             for w in d.weather_as_dict:
+                
                 recelem=etree.SubElement(delem,'record')
                 wa=d.weather_as_dict[w]
                 timelem=etree.SubElement(recelem,'time')
@@ -344,8 +394,10 @@ class _fcdumper:
                 helem.text="0" if not wa.humid else str(wa.humid)
             dind+=1
         with open(file,'w') as f:
+            debugger.debug('saving file')
             f.write(etree.tounicode(froot,pretty_print=True))
     def load(self,xmlfile):
+        debugger.debug('loading weather from cache')
         t=etree.parse(open(xmlfile))
         unit=t.find('.//unit').text
         city=t.find('.//city').text
@@ -363,7 +415,9 @@ class _fcdumper:
         cdix=0
         weather_as_dict={}
         forecast=[]
+        debugger.debug(f'{records} records found')
         for wi in range(records):
+            
             tm=times[wi].text
             temp=float(temps[wi].text)
             precip=float(precps[wi].text)
@@ -516,12 +570,17 @@ class _WeatherChannel:
         return l
     class Forecast:
         '''Implemantation of weather forecast'''
-        def __init__(self,temp,today,nxt,city,ctr):
+        def __init__(self,days,city,ctr):
             self.city=city
             self.country=ctr
             debugger.debug("created forecast")
             e=None
-            if not isinstance(today,_WeatherChannel.Day):
+            self.temp=days[0].weather_as_list[0].temp
+            self.today=days[0]
+            self.days=days
+            self.tomorrow=days[1]
+
+            '''if not isinstance(self.today,_WeatherChannel.Day):
                 raise TypeError(
                 f"'today' argument must be weather._WeatherChannel.Day, not {today.__class__.__name__}'")
             try:
@@ -533,11 +592,7 @@ class _WeatherChannel:
             for i in nxt:
                 if not isinstance(i,_WeatherChannel.Day):
                     raise TypeError(
-                    f"all members of 'nxt' argument must be \"_WeatherChannel.Day\", not {i.__class__.__name__}'")
-            self.temp=temp
-            self.today=today
-            self.days=nxt
-            self.tomorrow=nxt[0]
+                    f"all members of 'nxt' argument must be \"_WeatherChannel.Day\", not {i.__class__.__name__}'")'''
         def day(self,num):
             '''Returns weather at day n'''
             return self.days[num]
@@ -663,6 +718,7 @@ class _WeatherChannel:
             lastTime=self.splittime(time)[0]
 
         return days
+
     def getgraph(self,ch,unit):
         '''Gets full data and formats them into Forecast object'''
         debugger.debug("Parser has started!")
@@ -685,7 +741,7 @@ class _WeatherChannel:
                 t=a[j]
                 wthrs_inner.append(
                              self.Weather(
-                                          Wind(t),
+                                          Wind(t,0),
                                           precip[ind][j],
                                           svg[ind][j],
                                           unit=unit
@@ -703,7 +759,7 @@ class _WeatherChannel:
             for j in s:
                 t=a[j]
                 wtdc_inner[j]=self.Weather(
-                                          Wind(t),
+                                          Wind(t,0),
                                           precip[ind][j],
                                           svg[ind][j]
                                           )
@@ -759,9 +815,7 @@ class _WeatherChannel:
 
     def parsefcast(self,days,temp,unit,city,ctr):
         '''Parses forecast'''
-        first=days[0]
-        nxt=days[1:]
-        return self.Forecast(temp,first,nxt,city,ctr)
+        return self.Forecast(days,city,ctr)
     def forecast(self,cityname=CITY,countryname='',unit=None,driver=None):
         '''Gets forecast'''
         err=None
@@ -807,7 +861,7 @@ class _WeatherChannel:
             cacher.cache(foc)
             return foc
         except Exception as e:
-            debugger.debug(f"could not load forecast for {cityname}, trying without country","ERROR")
+            debugger.debug(f"could not load forecast for {cityname}, trying without country; ({str(e)} throwed)","ERROR")
             err=WeatherError(f"could not get forecast for city {cityname}({str(e)} throwed)")
             if countryname==_DONTCHECK:
                 raise err
@@ -1596,7 +1650,7 @@ debugger.debug=debugger.debug
 cacher=_cacher()
 fastener=_fastener()
 getcountry=fastener.getcountry
-SERVICES={'google':google,'yrno':yrno,'metno':yrno,'7timer':f7timer}
+SERVICES={'google':google,'yrno':yrno,'metno':yrno,'7timer':f7timer,'average':average}
 def fix(svc):
     fxd = difflib.get_close_matches(svc,SERVICES.keys(),n=1,cutoff=0.7)
     if len(fxd)>0:
@@ -1649,4 +1703,62 @@ def forecast(cityname=CITY,countryname=None,unit=None,service=average,debug=Fals
                 raise KeyboardInterrupt("interrupted while searching for forecast")
             raise
 
+class More(object):
+    def __init__(self, num_lines,debug=False):
+        self.num_lines = num_lines
+        self.debug=debug
+    def __ror__(self, other):
+        s = str(other).split("\n")
+        print(*s[:self.num_lines], sep="\n")
 
+        for i in range( self.num_lines,len(s)):
+            print("--MORE--\r",end="")
+            key=getchlib.getkey()
+            if key.lower()=='q' :
+                if not self.debug:
+                    termutils.clear()
+                quit()
+            print(s[i])
+        time.sleep(0.1)
+
+class CLI:
+    def main(self):
+        parser=argparse.ArgumentParser(description='Python app for getting weather forecast')
+        parser.add_argument('--city',type=str,help='City for forecast (if not passed, using current location)',nargs=1)
+        parser.add_argument('--country',type=str,help='Country for forecast (see above)',nargs=1)
+        parser.add_argument('-d','--debug',action='store_true',help='Debug')
+        parser.add_argument('-s','--service',type=str,help='Service to use (e.g. "yrno","7timer","google"). Implied with "average"(try to optimise the service)')
+        args=parser.parse_args()
+        if not args.city:
+            args.city=[CITY]
+        if not args.country:
+            args.country=[None]
+        if not args.service:
+            args.service="average"
+        
+        if not args.debug:
+            termutils.clear()
+            print('Loading ...')
+        foc=forecast(args.city[0],args.country[0],service=args.service,debug=args.debug)
+        if not args.debug:
+            termutils.clear()
+        termcolor.cprint('Weather forecast for',end=' ',color='cyan')
+        termcolor.cprint(art.text2art(','.join([foc.city,foc.country])+ '    ',font='fancy90'),color='yellow')
+        if isinstance(foc,yrno.Forecast):
+            source='Yr.no'
+        elif isinstance(foc,google.Forecast):
+            source='Google'
+        elif isinstance(foc,f7timer.Forecast):
+            source='7timer!'
+        else:
+            source=None
+        lac=2
+        if source:
+            print('Source : '+source)
+            lac+=1
+        foc2t(foc)|More(num_lines=os.get_terminal_size().lines-lac,debug=args.debug)  
+        
+cli=CLI()
+main=cli.main
+if __name__=='__main__':
+    main()
