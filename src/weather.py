@@ -76,9 +76,13 @@ def foc2t(foc):
     date=datetime.date.today()
     dayc=0
     table=[]
-    for day in foc.days:
-
-        for h in range(1,24):
+    while True:
+        begintime=datetime.datetime.now().hour if not dayc else 1
+        try:
+            day=foc.day(dayc)
+        except IndexError:
+            break
+        for h in range(begintime,24):
             weah=day[f'{h}:00']
             table.append([str(date),f'{h}:00',str(weah.temp)+"°"+u,weah.precip,weah.humid,weah.wind.direction.direction,weah.wind.speed])
         dayc+=1
@@ -380,7 +384,7 @@ class _fcdumper:
                 telem=etree.SubElement(weather,'temp')
                 telem.text=str(wa.temp)
                 pelem=etree.SubElement(weather,'precip')
-                pelem.text='0.0' if not wa.precip else str(int(wa.precip))
+                pelem.text='0.0' if not wa.precip else str(float(wa.precip))
                 welem=etree.SubElement(weather,'wind')
                 wspeed=etree.SubElement(welem,'speed')
                 wdir=etree.SubElement(welem,'direction')
@@ -471,7 +475,7 @@ class _WeatherChannel:
         '''Implementation of weather'''
         def __init__(self,wind,precip,temp,humid=None,unit=CELSIUS):
             self.temp=temp
-            self.precip=precip
+            self.precip=precip/10
             self.wind=wind
             self.humid=humid
             self.unit=unit
@@ -953,7 +957,7 @@ class _YR_NORI:
 
     class Forecast:
         '''implementation of weather forecast'''
-        def __init__(self,days,city,country):
+        def __init__(self,days,city,country,*args,**kwargs):
             self.today=days[0]
             self.tomorrow=days[1]
             self.days=days
@@ -1050,6 +1054,7 @@ class _YR_NORI:
         ca=cacher.getcached(cityname,countryname)
         
         for caf in ca:
+            
             foc=dumper.load(caf)
             if isinstance(foc,self.__class__.Forecast):
                 return foc
@@ -1603,19 +1608,20 @@ class parser:
 
 class _Avg:
     '''get best forecast result'''
-    SVC=['yrno','google','7timer']
+    SVC=['yrno','google']
     def forecast(self,*a,**k):
+        ress=[]
         for service in self.SVC:
             debugger.debug(f"running service \"{service}\"")
             try:
-                return SERVICES[service].forecast(*a,**k)
+                ress.append( SERVICES[service].forecast(*a,**k))
             except KeyboardInterrupt:
                 raise SetupError("lost connection to service")
             except urllib3.exceptions.MaxRetryError:
                 try:
                     debugger.debug("Lost connection to the driver,attempting reconnect...","ERROR")
                     importlib.reload(selenium)
-                    return service.forecast(cityname,countryname,unit)
+                    ress.append(SERVICES[service].forecast(*a,**k))
                 except urllib3.exceptions.MaxRetryError:
                     raise DriverError(
                                   """Because of unknown error in Selenium was lost connection to driver.
@@ -1631,12 +1637,40 @@ class _Avg:
                 raise DriverError(
                                  """Could not set up the driver, probably keyboard interrupt?"""
                                  )
+
             except Exception as e:
                 
                 if e==KeyboardInterrupt:
                     raise KeyboardInterrupt("interrupted while searching for forecast")
                 raise
-        raise WeatherError("could not find service matching your search")
+        if not ress:
+            raise WeatherError("could not find service matching your search")
+        fcast=[]
+        city=ress[0].city
+        country=ress[0].country
+        for i in ress:
+            dayc=0
+            for day in i.days:
+                if len(fcast)<dayc+1:
+                    wdict={}
+                else:
+                    wdict=fcast[dayc].weather_as_dict
+                for time,weather in day.weather_as_dict.items():
+                    if time not in wdict:
+                        wdict[time]=weather
+                    else:
+                        olw=wdict[time]
+                        olw.temp=(olw.temp+weather.temp)//2
+                        if weather.humid is not None:
+                            olw.humid=(olw.humid+weather.humid)//2
+                        olw.wind.speed=(olw.wind.speed+weather.wind.speed)/2
+                        olw.wind.direction=Direction((olw.wind.direction.angle+weather.wind.direction.angle)//2)
+                        if type(weather.precip) in [int,float]:
+                            olw.precip=(weather.precip+olw.precip)/2
+                        wdict[time]=olw
+                fcast.append(yrno.Day(list(wdict.values()),wdict))
+        return yrno.Forecast(fcast,city,country)
+
 parser=parser()
 google=_WeatherChannel()
 yrno=_YR_NORI()
@@ -1692,7 +1726,7 @@ def forecast(cityname=CITY,countryname=None,unit=None,service=average,debug=Fals
             
             if e==NoSuchCityError:
                 raise
-            debugger.debug(f'service \"{service}\" does not recognise place',"ERROR")
+            debugger.debug(f'service \"{service}\" does not recognise place ;{e} raised',"ERROR")
         except selenium.common.exceptions.WebDriverException:
             raise DriverError(
                              """Could not set up the driver, probably keyboard interrupt?"""
@@ -1714,11 +1748,13 @@ class More(object):
         for i in range( self.num_lines,len(s)):
             print("--MORE--\r",end="")
             key=getchlib.getkey()
+            
             if key.lower()=='q' :
                 if not self.debug:
                     termutils.clear()
                 quit()
-            print(s[i])
+            if key in ['\x1b[B','\x1b[6~',' ','\n']:
+                print(s[i])
         time.sleep(0.1)
 
 class CLI:
@@ -1740,10 +1776,12 @@ class CLI:
             termutils.clear()
             print('Loading ...')
         foc=forecast(args.city[0],args.country[0],service=args.service,debug=args.debug)
+        if foc is None:
+            raise NoSuchCityError(f'no such city :{args.city[0]!r}')
         if not args.debug:
             termutils.clear()
         termcolor.cprint('Weather forecast for',end=' ',color='cyan')
-        termcolor.cprint(art.text2art(','.join([foc.city,foc.country])+ '    ',font='fancy90'),color='yellow')
+        termcolor.cprint(','.join([foc.city,foc.country]),color='yellow')
         if isinstance(foc,yrno.Forecast):
             source='Yr.no'
         elif isinstance(foc,google.Forecast):
