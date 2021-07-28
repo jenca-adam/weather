@@ -1,0 +1,116 @@
+<h1>weather - Access weather forecast</h1>
+
+<h2>Installation</h2>
+
+<p><code>
+pip install weather
+</code></p>
+
+<h2>Usage</h2>
+
+<p><code>python
+import weather
+forecast=weather.forecast()
+forecast.today['6:00'].temp # Get temperature in current location at 6.00
+</code></p>
+
+<h3>Different places</h3>
+
+<p>If you want to get forecast from different place, pass <code>forecast</code> an argument.
+<code>python
+import weather
+forecast=weather.forecast('New York')
+forecast.tommorow['11:00'].precip # Get precipitation in New York at 11.00
+</code></p>
+
+<h3>Different sources</h3>
+
+<p><code>weather</code> supports multiple weather sources:
+1. [Yr.No] (https://yr.no)
+1. [Google] (https://google.com)
+1. [7timer!] (https://7timer.info)
+If you want to get weather from different source, pass <code>forecast</code> argument called <code>source</code>.
+<code>python
+weather.forecast(source='yrno')
+weather.forecast(source='google')
+weather.forecast(source='7timer')
+</code></p>
+
+<h3>Weather properties</h3>
+
+<h4>1. <code>wind</code></h4>
+
+<p>Instance of <code>Wind()</code>
+Properties:</p>
+
+<h5>1. <code>speed</code></h5>
+
+<pre><code>   Integer
+   Speed in m/s
+</code></pre>
+
+<h4>2. <code>direction</code></h4>
+
+<p>Instance of Direction()
+Properties:</p>
+
+<h6>1. <code>angle</code></h6>
+
+<p>Integer
+Angle in degrees</p>
+
+<h6>2. <code>direction</code></h6>
+
+<p>String
+Angle in compass point ( &lsquo;N&rsquo;,&lsquo;NE&rsquo;,&lsquo;E&rsquo;,&lsquo;SE&rsquo;,&rsquo;S',&lsquo;SW&rsquo;,&lsquo;W&rsquo;, or &lsquo;NW&rsquo; )</p>
+
+<h4>2. <code>temp</code></h4>
+
+<pre><code>  Float/Integer
+  Temperature in °C or °F (not °K)(default °C, see 'Changing units')
+</code></pre>
+
+<h4>3. <code>humid</code>(yr.no only, other services will return None)</h4>
+
+<pre><code>  Float/Integer
+  Humidity in %.
+</code></pre>
+
+<h4>4. <code>precip</code>(7timer will return bool)</h4>
+
+<pre><code>  Float/Integer
+  Precipitation amount in milimeters
+</code></pre>
+
+<h3>Changing units</h3>
+
+<p><code>python
+weather.forecast('New york', unit=weather.CELSIUS)#or weather.FAHRENHEIT
+</code></p>
+
+<h3>CLI</h3>
+
+<p>Just run <code>weather</code>:
+    <code>[user@localhost ~] weather</code>
+If you want to get all avaliable switches, use <code>weather -h</code>:</p>
+
+<p>```python</p>
+
+<p>usage: weather [-h] [&ndash;city CITY] [&ndash;country COUNTRY] [-d] [-s SERVICE]</p>
+
+<p>Python app for getting weather forecast</p>
+
+<p>optional arguments:
+  -h, &ndash;help            show this help message and exit
+  &ndash;city CITY           City for forecast (if not passed, using current location)
+  &ndash;country COUNTRY     Country for forecast (see above)
+  -d, &ndash;debug           Debug
+  -s SERVICE, &ndash;service SERVICE
+                        Service to use (e.g. &ldquo;yrno&rdquo;,&ldquo;7timer&rdquo;,&ldquo;google&rdquo;). Implied with &ldquo;average&rdquo;(try to optimise the service)</p>
+
+<p>```
+That says basically enough to use it.</p>
+
+<h3>License</h3>
+
+<p><code>weather</code> is licensed under <em>GPL license</em></p>

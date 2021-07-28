@@ -1,0 +1,100 @@
+Metadata-Version: 2.1
+Name: weather
+Version: 1.3.2
+Summary: Access weather forecast
+Home-page: https://pypi.org/project/weather
+Author: Adam Jenca
+Author-email: jenca.adam@gmail.com
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: License :: OSI Approved :: GNU General Public License (GPL)
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+
+
+# weather - Access weather forecast
+## Installation
+```
+pip install weather
+```
+## Usage
+```python
+import weather
+forecast=weather.forecast()
+forecast.today['6:00'].temp # Get temperature in current location at 6.00
+```
+### Different places
+If you want to get forecast from different place, pass `forecast` an argument.
+```python
+import weather
+forecast=weather.forecast('New York')
+forecast.tommorow['11:00'].precip # Get precipitation in New York at 11.00
+```
+### Different sources
+`weather` supports multiple weather sources:
+1. [Yr.No] (https://yr.no)
+1. [Google] (https://google.com)
+1. [7timer!] (https://7timer.info)
+If you want to get weather from different source, pass `forecast` argument called `source`.
+```python
+weather.forecast(source='yrno')
+weather.forecast(source='google')
+weather.forecast(source='7timer')
+```
+###&nbsp;Weather&nbsp;properties
+1.&nbsp;`wind`
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Instance&nbsp;of&nbsp;`Wind()`
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Properties:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;`speed`
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Integer
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Speed&nbsp;in&nbsp;m/s
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;`direction`
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Instance&nbsp;of&nbsp;Direction()
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Properties:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. `angle`
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Integer
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Angle&nbsp;in&nbsp;degrees
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. `direction`
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Angle&nbsp;in&nbsp;compass&nbsp;point&nbsp;(&nbsp;'N','NE','E','SE','S','SW','W',&nbsp;or&nbsp;'NW'&nbsp;)
+2. `temp`
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Float/Integer
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Temperature&nbsp;in&nbsp;°C&nbsp;or&nbsp;°F&nbsp;(not&nbsp;°K)(default&nbsp;°C,&nbsp;see&nbsp;'Changing&nbsp;units')
+3. `humid`(yr.no&nbsp;only,&nbsp;other&nbsp;services&nbsp;will&nbsp;return&nbsp;None)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Float/Integer
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Humidity&nbsp;in&nbsp;%.
+4. `precip`(7timer&nbsp;will&nbsp;return&nbsp;bool)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Float/Integer
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Precipitation&nbsp;amount&nbsp;in&nbsp;milimeters
+### Changing&nbsp;units
+```python
+weather.forecast('New york', unit=weather.CELSIUS)#or weather.FAHRENHEIT
+```
+### CLI
+Just run `weather`:
+    ```[user@localhost ~] weather```
+If you want to get all avaliable switches, use `weather -h`
+```
+usage: weather [-h] [--city CITY] [--country COUNTRY] [-d] [-s SERVICE]
+
+Python app for getting weather forecast
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --city CITY           City for forecast (if not passed, using current location)
+  --country COUNTRY     Country for forecast (see above)
+  -d, --debug           Debug
+  -s SERVICE, --service SERVICE
+                        Service to use (e.g. "yrno","7timer","google"). Implied with "average"(try to optimise the service)
+```
+That says basically enough to use it.
+
+## License
+`weather` is licensed under *GPL license*
+
+

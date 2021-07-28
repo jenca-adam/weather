@@ -1,0 +1,10 @@
+README.md
+setup.py
+weather/__init__.py
+weather/__main__.py
+weather.egg-info/PKG-INFO
+weather.egg-info/SOURCES.txt
+weather.egg-info/dependency_links.txt
+weather.egg-info/entry_points.txt
+weather.egg-info/requires.txt
+weather.egg-info/top_level.txt
