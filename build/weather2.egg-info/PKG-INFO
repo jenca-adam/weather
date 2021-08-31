@@ -1,8 +1,8 @@
 Metadata-Version: 2.1
 Name: weather2
-Version: 1.3.3
+Version: 1.3.5
 Summary: Access weather forecast
-Home-page: https://pypi.org/project/weather2
+Home-page: https://github.com/jenca-adam/weather
 Author: Adam Jenca
 Author-email: jenca.adam@gmail.com
 License: UNKNOWN

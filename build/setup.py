@@ -1,6 +1,6 @@
 from setuptools import setup
 setup(name='weather2',
-    version='1.3.4',
+    version='1.3.5',
     author='Adam Jenca',
     description='Access weather forecast',
     long_description=
@@ -108,7 +108,7 @@ That says basically enough to use it.
     author_email="jenca.adam@gmail.com",
     url="https://github.com/jenca-adam/weather",
     packages=['weather'],
-    install_requires=['urllib3','bs4','httplib2','geopy','selenium','colorama','lxml','langdetect','termcolor','tabulate','termutils','getchlib']
+    install_requires=['urllib3','bs4','httplib2','geopy','selenium','colorama','lxml','langdetect','termcolor','tabulate','termutils','getchlib','unitconvert']
 
 
     

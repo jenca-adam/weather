@@ -10,3 +10,4 @@ termcolor
 tabulate
 termutils
 getchlib
+unitconvert

@@ -1752,3 +1752,71 @@ console.error: services.settings:
 console.warn: services.settings: main/doh-config Signature verified failed. Retry from scratch
 console.log: WebExtensions: reset-default-search: starting.
 console.log: WebExtensions: reset-default-search: No addons in our list are installed.
+1627501631385	Marionette	INFO	Stopped listening on port 33229
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x390079,name=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1627501631823	Marionette	INFO	Stopped listening on port 43929
+1627501631913	Marionette	INFO	Stopped listening on port 36339
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1627501632136	Marionette	INFO	Stopped listening on port 43183
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1627501632781	Marionette	INFO	Stopped listening on port 35279
+1627501632971	Marionette	INFO	Stopped listening on port 42161
+1627501633264	Marionette	INFO	Stopped listening on port 35035
+1627501633282	Marionette	INFO	Stopped listening on port 40077
+1627501633279	Marionette	INFO	Stopped listening on port 34707
+1627501633324	Marionette	INFO	Stopped listening on port 38611
+1627501633371	Marionette	INFO	Stopped listening on port 45143
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1627501634301	Marionette	INFO	Stopped listening on port 43057
+1627501634519	Marionette	INFO	Stopped listening on port 39149
+1627501634585	Marionette	INFO	Stopped listening on port 35783
+1627501634662	Marionette	INFO	Stopped listening on port 38311
+1627501634693	Marionette	INFO	Stopped listening on port 35337
+1627501634650	Marionette	INFO	Stopped listening on port 37477
+1627501634756	Marionette	INFO	Stopped listening on port 38389
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x390079,name=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+1627501634758	Marionette	INFO	Stopped listening on port 41843
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1627501634820	Marionette	INFO	Stopped listening on port 45287
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1627501634885	Marionette	INFO	Stopped listening on port 45883
+1627501634892	Marionette	INFO	Stopped listening on port 39103
+1627501634886	Marionette	INFO	Stopped listening on port 33145
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1627501634951	Marionette	INFO	Stopped listening on port 45647
+1627501634965	Marionette	INFO	Stopped listening on port 39213
+1627501635076	Marionette	INFO	Stopped listening on port 34663
+1627501635134	Marionette	INFO	Stopped listening on port 40581
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x390079,name=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1627501635335	Marionette	INFO	Stopped listening on port 37755
+1627501635415	Marionette	INFO	Stopped listening on port 44417
