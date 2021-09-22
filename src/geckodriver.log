@@ -1820,3 +1820,11 @@ console.log: WebExtensions: reset-default-search: No addons in our list are inst
 
 1627501635335	Marionette	INFO	Stopped listening on port 37755
 1627501635415	Marionette	INFO	Stopped listening on port 44417
+1632318736459	geckodriver	INFO	Listening on 127.0.0.1:51897
+1632318736465	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilezqeT9W"
+*** You are running in headless mode.
+1632318736783	Marionette	INFO	Marionette enabled
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilezqeT9W/search.json.mozlz4", (void 0)))
+1632318737770	Marionette	INFO	Listening on port 40671
+1632318737790	RemoteAgent	WARN	TLS certificate errors will be ignored for this session

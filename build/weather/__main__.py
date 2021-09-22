@@ -1305,7 +1305,7 @@ class _driverSearch:
              debugger.debug("Lost connection to the driver,attempting reconnect...","ERROR")
 
         debugger.debug("initialized driver search")
-        self.browsers=[Chrome,Firefox,Safari,Ie,Edge,PhantomJS]
+        self.browsers=[Chrome,Firefox,Safari,Ie,Edge]
         self.reprs={repr(i):i for i in self.browsers}
         '''If it is possible, initiate in headless mode'''
         _CHOPT=chrome.options
@@ -1354,14 +1354,8 @@ class _driverSearch:
                             i=Ie()
                             i.quit()
                             ie_aval=True
-                        except:
-                            try:
-                                pjs=PhantomJS()
-                                pjs.quit()
-                                pjs_aval=True
-                            except:pass
-
-            self.aval=[[Chrome,chrome_aval],[Firefox,firefox_aval],[Safari,safari_aval],[Ie,ie_aval],[PhantomJS,pjs_aval]]
+                       
+            self.aval=[[Chrome,chrome_aval],[Firefox,firefox_aval],[Safari,safari_aval],[Ie,ie_aval]]
             with open('.cache/weather/aval','w')as f:
                 res=[]
                 for i,j in self.aval:
