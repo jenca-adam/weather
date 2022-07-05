@@ -180,6 +180,10 @@ class DirectionError(WindError):
     '''
     Raised when direction is not "N","NE","E","SE","S","SW","W" or "NW"(if it is a string) or higher than 360(if it is a integer)
     '''
+class GeolocationError(Exception):
+    '''
+    Raised when Nominatim is out
+    '''
 class _fastener:
     def __init__(self):
         os.makedirs('.cache/weather/',exist_ok=True)
@@ -217,8 +221,11 @@ def searchurl(query):
     '''Returns Google Search URL according to query'''  
     return f'https://google.com/search?q={query}'
 def _getcountry(city):
-    '''Return country that city is located in''' 
-    a=locator.geocode(city).address.split(',')[-1].strip()
+    '''Return country that city is located in'''
+    try:
+        a=locator.geocode(city).address.split(',')[-1].strip()
+    except Exception as e:
+        raise GeolocationError(f'unable to geolocate: Nominatim raised {str(e)}.')
     return translate(a)
 def _rq(h,u):
     '''Handles IpApi ConnectionResetError'''
@@ -328,6 +335,8 @@ def search(query):
 LOCATION=curloc()
 CITY=LOCATION.city
 COUNTRY=LOCATION.country
+LAT=LOCATION.lat
+LON=LOCATION.lon
 ### Set temperature unit to Fahrenheit if user is in US
 if COUNTRY=='United States':
     UNIT=FAHRENHEIT
@@ -464,11 +473,11 @@ class _cacher:
     
 
         
-class _WeatherChannel:
-    '''weather.google type'''
+class _WeatherChannel:#DEPRECATED!
+    '''weather.google type - DEPRECATED!!!!'''
     def __init__(self):
         '''Set driver to None for fututre forecast requests will be faster'''
-        self.driver=None
+        #self.driver=None
     class Weather:
         '''Implementation of weather'''
         def __init__(self,wind,precip,temp,humid=None,unit=CELSIUS):
@@ -668,15 +677,19 @@ class _WeatherChannel:
         try:
                 ch.find_elements_by_class_name("jyfHyd")[1].click()
         except:pass
+        svgi=''
         #wait until forecast loads 
-        time.sleep(0.7)
-        svg=ch.find_element_by_id('wob_gsvg')
+        while not svgi: 
+            svg=ch.find_element('css selector','#wob_gsvg')
+            svgi=svg.get_attribute('innerHTML')
         svg=svg.get_attribute('outerHTML')
+        print(svg)
+
         return self.analyzesvg(svg,unit)
     def getprecip(self,ch):
         '''Gets precipitation data'''
         debugger.debug("Analyzing precipitation")
-        precip_html_element=ch.find_element_by_id('wob_pg')
+        precip_html_element=ch.find_element('css selector','#wob_pg')
         precip_html=precip_html_element.get_attribute('outerHTML')
         precip_soup=bs(precip_html,
                         'html.parser')
@@ -702,7 +715,7 @@ class _WeatherChannel:
     def getwind(self,ch):
         '''Gets wind data'''
         debugger.debug("Analyzing wind")
-        wind_html_element=ch.find_element_by_id('wob_wg')
+        wind_html_element=ch.find_element('css selector','#wob_wg')
         wind_html=wind_html_element.get_attribute('outerHTML')
         wind_soup=bs(wind_html,
                         'html.parser')
@@ -725,6 +738,7 @@ class _WeatherChannel:
         '''Gets full data and formats them into Forecast object'''
         debugger.debug("Parser has started!")
         svg=self.getsvg(ch,unit)
+        print(svg)
         precip=self.getprecip(ch)
         wind=self.getwind(ch)
 
@@ -821,6 +835,8 @@ class _WeatherChannel:
     def forecast(self,cityname=CITY,countryname='',unit=None,driver=None):
         '''Gets forecast'''
         err=None
+        debugger.warn("weather.google is deprecated and will be removed in future versions!")
+        warnings.warn("weather.google is deprecated and will be removed in future versions!")
         self.driver=driver
         if self.driver is None:
             driver=_driverSearch()
@@ -863,6 +879,7 @@ class _WeatherChannel:
             cacher.cache(foc)
             return foc
         except Exception as e:
+            raise
             debugger.debug(f"could not load forecast for {cityname}, trying without country; ({str(e)} throwed)","ERROR")
             err=WeatherError(f"could not get forecast for city {cityname}({str(e)} throwed)")
             if countryname==_DONTCHECK:
@@ -878,6 +895,7 @@ class _WeatherChannel:
             raise ValueError(
                             'Could not parse temperature string')
         return int(match.group(0).replace('°',''))
+
 class _YR_NORI:
     '''yr.no source'''
     def __init__(self):
@@ -1050,7 +1068,7 @@ class _YR_NORI:
         if cityname==CITY and not countryname:
             countryname=COUNTRY
         ca=cacher.getcached(cityname,countryname)
-        
+
         for caf in ca:
             
             foc=dumper.load(caf)
@@ -1354,7 +1372,8 @@ class _driverSearch:
                             i=Ie()
                             i.quit()
                             ie_aval=True
-                       
+                        except:
+                            pass
             self.aval=[[Chrome,chrome_aval],[Firefox,firefox_aval],[Safari,safari_aval],[Ie,ie_aval]]
             with open('.cache/weather/aval','w')as f:
                 res=[]
@@ -1597,10 +1616,9 @@ class parser:
                 raise self.ParsingError(
                 "not a valid time -- second int is larger than first")
             return f+d
-
 class _Avg:
     '''get best forecast result'''
-    SVC=['yrno','google']
+    SVC=['yrno','7timer']
     def forecast(self,*a,**k):
         ress=[]
         for service in self.SVC:
@@ -1676,7 +1694,7 @@ debugger.debug=debugger.debug
 cacher=_cacher()
 fastener=_fastener()
 getcountry=fastener.getcountry
-SERVICES={'google':google,'yrno':yrno,'metno':yrno,'7timer':f7timer,'average':average}
+SERVICES={'yrno':yrno,'metno':yrno,'7timer':f7timer,'average':average}
 def fix(svc):
     fxd = difflib.get_close_matches(svc,SERVICES.keys(),n=1,cutoff=0.7)
     if len(fxd)>0:

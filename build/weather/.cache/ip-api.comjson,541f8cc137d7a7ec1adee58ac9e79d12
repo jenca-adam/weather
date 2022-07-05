@@ -1,0 +1,10 @@
+status: 200
+date: Tue, 05 Jul 2022 16:30:57 GMT
+content-type: application/json; charset=utf-8
+content-length: 312
+access-control-allow-origin: *
+x-ttl: 60
+x-rl: 44
+content-location: http://ip-api.com/json/
+
+{"status":"success","country":"Slovakia","countryCode":"SK","region":"BL","regionName":"Bratislava","city":"Bratislava","zip":"841 05","lat":48.1833,"lon":17.0379,"timezone":"Europe/Bratislava","isp":"Orange Slovensko","org":"Orange Slovensko, a.s.","as":"AS15962 Orange Slovensko a.s.","query":"109.230.50.234"}

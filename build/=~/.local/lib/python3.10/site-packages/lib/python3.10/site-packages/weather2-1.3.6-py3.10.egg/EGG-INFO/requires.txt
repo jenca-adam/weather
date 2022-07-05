@@ -1,0 +1,13 @@
+urllib3
+bs4
+httplib2
+geopy
+selenium
+colorama
+lxml
+langdetect
+termcolor
+tabulate
+termutils
+getchlib
+unitconvert

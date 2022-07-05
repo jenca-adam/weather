@@ -1,0 +1,26 @@
+status: 301
+location: https://www.google.com/search?q=weather%20tesco%20United%20Kingdom
+content-type: text/html; charset=UTF-8
+content-security-policy: object-src 'none';base-uri 'self';script-src 'nonce-dkONGBMjhdkA7iCyhYzQFQ==' 'strict-dynamic' 'report-sample' 'unsafe-eval' 'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/cdt1
+cross-origin-opener-policy-report-only: same-origin-allow-popups; report-to="gws"
+report-to: {"group":"gws","max_age":2592000,"endpoints":[{"url":"https://csp.withgoogle.com/csp/report-to/gws/cdt1"}]}
+bfcache-opt-in: unload
+date: Wed, 13 Apr 2022 17:26:35 GMT
+expires: Wed, 13 Apr 2022 17:26:35 GMT
+cache-control: private, max-age=2592000
+server: gws
+content-length: 263
+x-xss-protection: 0
+x-frame-options: SAMEORIGIN
+set-cookie: CONSENT=PENDING+552; expires=Fri, 12-Apr-2024 17:26:35 GMT; path=/; domain=.google.com; Secure
+p3p: CP="This is not a P3P policy! See g.co/p3phelp for more info."
+alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443"; ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+-x-permanent-redirect-url: https://www.google.com/search?q=weather%20tesco%20United%20Kingdom
+content-location: https://google.com/search?q=weather%20tesco%20United%20Kingdom
+
+<HTML><HEAD><meta http-equiv="content-type" content="text/html;charset=utf-8">
+<TITLE>301 Moved</TITLE></HEAD><BODY>
+<H1>301 Moved</H1>
+The document has moved
+<A HREF="https://www.google.com/search?q=weather%20tesco%20United%20Kingdom">here</A>.
+</BODY></HTML>

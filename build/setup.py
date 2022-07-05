@@ -1,6 +1,6 @@
 from setuptools import setup
 setup(name='weather2',
-    version='1.3.6',
+    version='1.4.0',
     author='Adam Jenca',
     description='Access weather forecast',
     long_description=
@@ -31,9 +31,9 @@ forecast.tommorow['11:00'].precip # Get precipitation in New York at 11.00
 If you want to get weather from different source, pass `forecast` argument called `source`.
 ```python
 weather.forecast(source='yrno')
-weather.forecast(source='google')
 weather.forecast(source='7timer')
 ```
+_NOTE: from 1.4.0 on, the google source is DEPRECATED and is likely to be removed in the future_
 ### Weather properties
 #### 1. `wind`
 Instance of `Wind()`

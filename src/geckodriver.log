@@ -1828,3 +1828,37 @@ console.log: WebExtensions: reset-default-search: No addons in our list are inst
 console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilezqeT9W/search.json.mozlz4", (void 0)))
 1632318737770	Marionette	INFO	Listening on port 40671
 1632318737790	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1638978564163	geckodriver	INFO	Listening on 127.0.0.1:46341
+1638978564166	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile9wtGFL"
+*** You are running in headless mode.
+1638978564536	Marionette	INFO	Marionette enabled
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofile9wtGFL/search.json.mozlz4", (void 0)))
+1638978565624	Marionette	INFO	Listening on port 34421
+1638978565688	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1638978568573	geckodriver	INFO	Listening on 127.0.0.1:57263
+1638978568576	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilevmcCQy"
+*** You are running in headless mode.
+1638978568930	Marionette	INFO	Marionette enabled
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilevmcCQy/search.json.mozlz4", (void 0)))
+1638978570293	Marionette	INFO	Listening on port 35165
+1638978570403	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.log: WebExtensions: reset-default-search: starting.
+console.log: WebExtensions: reset-default-search: No addons in our list are installed.
+console.log: WebExtensions: reset-default-search: starting.
+console.log: WebExtensions: reset-default-search: No addons in our list are installed.
+geckodriver: error: Found argument '--websocket-port' which wasn't expected, or isn't valid in this context
+
+USAGE:
+    geckodriver [FLAGS] [OPTIONS]
+
+For more information try --help
+
+geckodriver: error: Found argument '--websocket-port' which wasn't expected, or isn't valid in this context
+
+USAGE:
+    geckodriver [FLAGS] [OPTIONS]
+
+For more information try --help
+
