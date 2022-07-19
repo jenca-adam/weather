@@ -18,9 +18,10 @@ forecast.tommorow['11:00'].precip # Get precipitation in New York at 11.00
 ```
 ### Different sources
 `weather` supports multiple weather sources:
-1. [Yr.No] (https://yr.no)
-1. [Google] (https://google.com)
-1. [7timer!] (https://7timer.info)
+1. [Yr.No](https://yr.no)
+2. [Google](https://google.com)
+3. [7timer!](https://7timer.info)
+
 If you want to get weather from different source, pass `forecast` argument called `source`.
 ```python
 weather.forecast(source='yrno')
@@ -28,30 +29,45 @@ weather.forecast(source='google')
 weather.forecast(source='7timer')
 ```
 ### Weather properties
-#### 1. `wind`
-Instance of `Wind()`
-Properties:
-##### 1. `speed`
-       Integer
-       Speed in m/s
-##### 2. `direction`
-Instance of Direction()
-Properties:
-###### 1. `angle`
-Integer
-Angle in degrees
-###### 2. `direction`
-String
-Angle in compass point ( 'N','NE','E','SE','S','SW','W', or 'NW' )
-#### 2. `temp`
-      Float/Integer
-      Temperature in °C or °F (not °K)(default °C, see 'Changing units')
-#### 3. `humid`(yr.no only, other services will return None)
-      Float/Integer
+<ol>
+  <li>
+    <p><code>wind</code>: Instance of <code>Wind()</code></p>
+    Properties:
+    <ol>
+      <li>
+        <p><code>speed</code>: Integer</p>
+        Speed in m/s
+      </li>
+      <li>
+        <p><code>direction</code>: Instance of <code>Direction()</code></p>
+        Properties:
+        <ol>
+          <li>
+            <p><code>angle</code>: Integer</p>
+            Angle in degrees
+          </li>
+          <li>
+            <p><code>direction</code>: String</p>
+            Angle in compass point (<code>'N'</code>,<code>'NE'</code>,<code>'E'</code>,<code>'SE'</code>,<code>'S'</code>,<code>'SW'</code>,
+            <code>'W'</code>, or <code>'NW'</code>)
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <p><code>temp</code>: Float/Integer</p>
+      Temperature in °C or °F (not °K) (default °C, see 'Changing units')
+  </li>
+  <li>
+    <p><code>humid</code> (<code>yr.no</code> only, other services will return <code>None</code>): Float/Integer</p>
       Humidity in %.
-#### 4. `precip`(7timer will return bool)
-      Float/Integer
+  </li>
+  <li>
+    <p><code>precip</code> (<code>7timer</code> will return <code>bool</code>): Float/Integer</p>
       Precipitation amount in milimeters
+</ol>
+
 ### Changing units
 ```python
 weather.forecast('New york', unit=weather.CELSIUS)#or weather.FAHRENHEIT
@@ -81,4 +97,3 @@ That says basically enough to use it.
 ### License
 
 `weather` is licensed under *GPL license*
-
