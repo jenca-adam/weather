@@ -1,6 +1,6 @@
 from setuptools import setup
 setup(name='weather2',
-    version='1.4.0',
+    version='1.5.0',
     author='Adam Jenca',
     description='Access weather forecast',
     long_description=
@@ -81,7 +81,7 @@ optional arguments:
   -d, --debug           Debug
   -s SERVICE, --service SERVICE
                         Service to use (e.g. "yrno","7timer","google"). Implied with "average"(try to optimise the service)
-
+  -u, --ugly            Toggle JSON output
 ``` 
 That says basically enough to use it.
 

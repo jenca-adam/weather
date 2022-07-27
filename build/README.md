@@ -90,7 +90,7 @@ optional arguments:
   -d, --debug           Debug
   -s SERVICE, --service SERVICE
                         Service to use (e.g. "yrno","7timer","google"). Implied with "average"(try to optimise the service)
-
+  -u, --ugly            Toggle JSON output
 ``` 
 That says basically enough to use it.
 

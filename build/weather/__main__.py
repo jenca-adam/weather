@@ -69,11 +69,14 @@ def dateadd1(date):
     else:
         date[-1]+=1
     return datetime.date(*date)
-def foc2t(foc):
+def foc2t(foc,ugly=False):
     u=makeunit(foc.today.weather_as_list[0].unit)
     date=datetime.date.today()
     dayc=0
-    table=[]
+    if ugly:
+        table={}
+    else:
+        table=[]
     while True:
         begintime=datetime.datetime.now().hour if not dayc else 1
         try:
@@ -82,9 +85,14 @@ def foc2t(foc):
             break
         for h in range(begintime,24):
             weah=day[f'{h}:00']
-            table.append([str(date),f'{h}:00',str(weah.temp)+"°"+u,weah.precip,weah.humid,weah.wind.direction.direction,weah.wind.speed])
+            if not ugly:
+                table.append([str(date),f'{h}:00',str(weah.temp)+"°"+u,weah.precip,weah.humid,weah.wind.direction.direction,weah.wind.speed])
+            else:
+                table[f'{date} {h}:00']={"temp":weah.temp,"temp-unit":u,"precipitation":weah.precip,"rel-humidity":weah.humid,"wind-direction-compass":weah.wind.direction.direction,"wind-direction-angle":weah.wind.direction.angle,"wind-speed":weah.wind.speed}
         dayc+=1
         date=dateadd1(date)
+    if ugly:
+        return json.dumps(table)
     return tabulate.tabulate(table,['Date','Time',"Temperature",'Precipitation','Humidity','Wind direction','Wind speed'],tablefmt='fancy_grid')
 
 class TooManyRequestsError(ValueError):pass
@@ -1774,6 +1782,7 @@ class CLI:
         parser.add_argument('--country',type=str,help='Country for forecast (see above)',nargs=1)
         parser.add_argument('-d','--debug',action='store_true',help='Debug')
         parser.add_argument('-s','--service',type=str,help='Service to use (e.g. "yrno","7timer","google"). Implied with "average"(try to optimise the service)')
+        parser.add_argument('-u','--ugly',action='store_true',help='Toggle JSON output')
         args=parser.parse_args()
         if not args.city:
             args.city=[CITY]
@@ -1790,8 +1799,9 @@ class CLI:
             raise NoSuchCityError(f'no such city :{args.city[0]!r}')
         if not args.debug:
             termutils.clear()
-        termcolor.cprint('Weather forecast for',end=' ',color='cyan')
-        termcolor.cprint(','.join([foc.city,foc.country]),color='yellow')
+        if not args.ugly:
+            termcolor.cprint('Weather forecast for',end=' ',color='cyan')
+            termcolor.cprint(','.join([foc.city,foc.country]),color='yellow')
         if isinstance(foc,yrno.Forecast):
             source='Yr.no'
         elif isinstance(foc,google.Forecast):
@@ -1804,7 +1814,8 @@ class CLI:
         if source:
             print('Source : '+source)
             lac+=1
-        foc2t(foc)|More(num_lines=os.get_terminal_size().lines-lac,debug=args.debug)  
+
+        foc2t(foc,args.ugly)|More(num_lines=os.get_terminal_size().lines-lac,debug=args.debug)  
         
 cli=CLI()
 main=cli.main

@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: weather2
-Version: 1.4.0
+Version: 1.5.0
 Summary: Access weather forecast
 Home-page: https://github.com/jenca-adam/weather
 Author: Adam Jenca
@@ -94,7 +94,7 @@ optional arguments:
   -d, --debug           Debug
   -s SERVICE, --service SERVICE
                         Service to use (e.g. "yrno","7timer","google"). Implied with "average"(try to optimise the service)
-
+  -u, --ugly            Toggle JSON output
 ``` 
 That says basically enough to use it.
 
