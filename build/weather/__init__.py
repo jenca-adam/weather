@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-if __name__=='__main__':
+import sys
+if __name__=='__main__' and ('-a' not in sys.argv) and ('--api' not in sys.argv):
     print('Importing module, please wait...\r',end='')
 import json
 import urllib3
@@ -10,7 +11,7 @@ import random
 import time
 from geopy.geocoders import Nominatim
 from selenium import webdriver
-from selenium.webdriver import *
+#from selenium.webdriver import * #4
 import warnings
 import os
 import re
@@ -20,7 +21,6 @@ from pathlib import Path
 import selenium
 import colorama
 import inspect
-import sys
 import importlib
 import difflib
 from unitconvert.temperatureunits import TemperatureUnit as tu
@@ -33,7 +33,7 @@ import tabulate
 import calendar
 import datetime
 import termutils
-import getchlib
+import getkey as getchlib
 '''Python library for getting weather from different sources.
 Example:
 >>> import weather
@@ -233,8 +233,8 @@ def _getcountry(city):
     try:
         a=locator.geocode(city).address.split(',')[-1].strip()
     except Exception as e:
-        raise GeolocationError(f'unable to geolocate: Nominatim raised {str(e)}.')
-    return translate(a)
+        raise GeolocationError(f'unable to geolocate: Nominatim raised {str(e)}.') from None
+    return a
 def _rq(h,u):
     '''Handles IpApi ConnectionResetError'''
     try:
@@ -1061,7 +1061,7 @@ class _YR_NORI:
         results=results.findAll('li')
         results=[self.expandhref(result.a['href']) for result in results]
         return self.SearchResults(results) 
-    def forecast(self,cityname=CITY,countryname=None,unit=None):
+    def forecast(self,cityname=CITY,countryname=COUNTRY,unit=None):
         '''Gets forecast'''
         err=None
         if not countryname:
@@ -1073,10 +1073,7 @@ class _YR_NORI:
                 err=NoSuchCityError(f"no such city: '{cityname}'")
         if err:
             raise err
-        if cityname==CITY and not countryname:
-            countryname=COUNTRY
         ca=cacher.getcached(cityname,countryname)
-
         for caf in ca:
             
             foc=dumper.load(caf)
@@ -1087,6 +1084,10 @@ class _YR_NORI:
             lat,lon=LOCATION.lat,LOCATION.lon
         else:
             loct=locator.geocode(f'{cityname},{countryname}')
+            if loct is None:
+                raise GeolocationError(
+                f"No location named {cityname} in {countryname} found."
+                )
             lat,lon=loct.latitude,loct.longitude
         if unit is None:
             if countryname.lower()=='united states':
@@ -1287,7 +1288,7 @@ class _7Timer:
             return pattern.search(time).group(1)
         def c2f(self,fah,unit=CELSIUS):
             if unit==FAHRENHEIT:
-                return tu(fah,'C','F').doconnvert()
+                return tu(fah,'C','F').doconvert()
             return fah
 
              
@@ -1331,7 +1332,7 @@ class _driverSearch:
              debugger.debug("Lost connection to the driver,attempting reconnect...","ERROR")
 
         debugger.debug("initialized driver search")
-        self.browsers=[Chrome,Firefox,Safari,Ie,Edge]
+        self.browsers=[webdriver.Chrome,webdriver.Firefox,webdriver.Safari,webdriver.Ie,webdriver.Edge]
         self.reprs={repr(i):i for i in self.browsers}
         '''If it is possible, initiate in headless mode'''
         _CHOPT=chrome.options
@@ -1353,7 +1354,7 @@ class _driverSearch:
             os.makedirs('.cache/weather',exist_ok=True)
         debugger.debug("Getting browser avaliability data")
         if ('aval') not in os.listdir('.cache/weather'):
-            debugger.debug("Avaliability data not in cache!","WARNING")
+            debugger.debug("Availability data not in cache!","WARNING")
             chrome_aval=False
             firefox_aval=False
             safari_aval=False
@@ -1781,9 +1782,12 @@ class CLI:
         parser.add_argument('--city',type=str,help='City for forecast (if not passed, using current location)',nargs=1)
         parser.add_argument('--country',type=str,help='Country for forecast (see above)',nargs=1)
         parser.add_argument('-d','--debug',action='store_true',help='Debug')
-        parser.add_argument('-s','--service',type=str,help='Service to use (e.g. "yrno","7timer","google"). Implied with "average"(try to optimise the service)')
+        parser.add_argument('-s','--service',type=str,help='Service to use ("yrno" or "7timer"). Implied with "average"(try to optimise the service)')
         parser.add_argument('-u','--ugly',action='store_true',help='Toggle JSON output')
+        parser.add_argument('-a','--api',action="store_true",help="Just print the data (implies JSON output)")
         args=parser.parse_args()
+        if args.api:
+            args.ugly=True
         if not args.city:
             args.city=[CITY]
         if not args.country:
@@ -1791,13 +1795,13 @@ class CLI:
         if not args.service:
             args.service="average"
         
-        if not args.debug:
+        if not (args.debug or args.api):
             termutils.clear()
             print('Loading ...')
         foc=forecast(args.city[0],args.country[0],service=args.service,debug=args.debug)
         if foc is None:
             raise NoSuchCityError(f'no such city :{args.city[0]!r}')
-        if not args.debug:
+        if not (args.debug or args.api):
             termutils.clear()
         if not args.ugly:
             termcolor.cprint('Weather forecast for',end=' ',color='cyan')
@@ -1811,10 +1815,12 @@ class CLI:
         else:
             source=None
         lac=2
-        if source:
+        if source and not args.ugly:
             print('Source : '+source)
             lac+=1
-
+        if args.api:
+            print(foc2t(foc,args.ugly))
+            return
         foc2t(foc,args.ugly)|More(num_lines=os.get_terminal_size().lines-lac,debug=args.debug)  
         
 cli=CLI()

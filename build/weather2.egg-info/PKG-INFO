@@ -5,8 +5,6 @@ Summary: Access weather forecast
 Home-page: https://github.com/jenca-adam/weather
 Author: Adam Jenca
 Author-email: jenca.adam@gmail.com
-License: UNKNOWN
-Platform: UNKNOWN
 Classifier: Development Status :: 4 - Beta
 Classifier: Environment :: Console
 Classifier: Intended Audience :: Developers
@@ -101,6 +99,4 @@ That says basically enough to use it.
 ### License
 
 `weather` is licensed under *GPL license*
-
-
 

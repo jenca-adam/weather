@@ -8,981 +8,30 @@
   <days>
     <day index="0">
       <record>
-        <time>15:00</time>
-        <weather>
-          <temp>21.4</temp>
-          <precip>0.1</precip>
-          <wind>
-            <speed>5.7</speed>
-            <direction>
-              <angle>332</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>77.1</humid>
-        </weather>
-      </record>
-      <record>
         <time>16:00</time>
-        <weather>
-          <temp>21.3</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>6.2</speed>
-            <direction>
-              <angle>343</angle>
-              <compass>N</compass>
-            </direction>
-          </wind>
-          <humid>77.5</humid>
-        </weather>
-      </record>
-      <record>
-        <time>17:00</time>
-        <weather>
-          <temp>20.4</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>4.9</speed>
-            <direction>
-              <angle>340</angle>
-              <compass>N</compass>
-            </direction>
-          </wind>
-          <humid>82.7</humid>
-        </weather>
-      </record>
-      <record>
-        <time>18:00</time>
-        <weather>
-          <temp>20.1</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>4.9</speed>
-            <direction>
-              <angle>338</angle>
-              <compass>N</compass>
-            </direction>
-          </wind>
-          <humid>84.9</humid>
-        </weather>
-      </record>
-      <record>
-        <time>19:00</time>
-        <weather>
-          <temp>19.5</temp>
-          <precip>0.1</precip>
-          <wind>
-            <speed>4.4</speed>
-            <direction>
-              <angle>331</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>87.6</humid>
-        </weather>
-      </record>
-      <record>
-        <time>20:00</time>
         <weather>
           <temp>19.0</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>4.1</speed>
+            <speed>3.6</speed>
             <direction>
-              <angle>333</angle>
-              <compass>NW</compass>
+              <angle>173</angle>
+              <compass>S</compass>
             </direction>
           </wind>
-          <humid>86.8</humid>
-        </weather>
-      </record>
-      <record>
-        <time>21:00</time>
-        <weather>
-          <temp>18.4</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>3.9</speed>
-            <direction>
-              <angle>324</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>89.6</humid>
-        </weather>
-      </record>
-      <record>
-        <time>22:00</time>
-        <weather>
-          <temp>17.8</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>3.5</speed>
-            <direction>
-              <angle>323</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>91.9</humid>
-        </weather>
-      </record>
-      <record>
-        <time>23:00</time>
-        <weather>
-          <temp>17.5</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>3.7</speed>
-            <direction>
-              <angle>318</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>91.4</humid>
-        </weather>
-      </record>
-      <record>
-        <time>00:00</time>
-        <weather>
-          <temp>17.2</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>3.9</speed>
-            <direction>
-              <angle>322</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>85.9</humid>
-        </weather>
-      </record>
-    </day>
-    <day index="1">
-      <record>
-        <time>01:00</time>
-        <weather>
-          <temp>16.7</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>3.7</speed>
-            <direction>
-              <angle>327</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>85.6</humid>
-        </weather>
-      </record>
-      <record>
-        <time>02:00</time>
-        <weather>
-          <temp>16.1</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>2.9</speed>
-            <direction>
-              <angle>329</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>87.3</humid>
-        </weather>
-      </record>
-      <record>
-        <time>03:00</time>
-        <weather>
-          <temp>15.5</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>2.8</speed>
-            <direction>
-              <angle>319</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>90.1</humid>
-        </weather>
-      </record>
-      <record>
-        <time>04:00</time>
-        <weather>
-          <temp>15.8</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>3.2</speed>
-            <direction>
-              <angle>322</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>87.2</humid>
-        </weather>
-      </record>
-      <record>
-        <time>05:00</time>
-        <weather>
-          <temp>17.1</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>2.9</speed>
-            <direction>
-              <angle>318</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>81.4</humid>
-        </weather>
-      </record>
-      <record>
-        <time>06:00</time>
-        <weather>
-          <temp>18.7</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>3.3</speed>
-            <direction>
-              <angle>318</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>73.2</humid>
-        </weather>
-      </record>
-      <record>
-        <time>07:00</time>
-        <weather>
-          <temp>20.6</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>3.1</speed>
-            <direction>
-              <angle>325</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>65.8</humid>
-        </weather>
-      </record>
-      <record>
-        <time>08:00</time>
-        <weather>
-          <temp>22.4</temp>
-          <precip>0.4</precip>
-          <wind>
-            <speed>3.1</speed>
-            <direction>
-              <angle>325</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>58.9</humid>
-        </weather>
-      </record>
-      <record>
-        <time>09:00</time>
-        <weather>
-          <temp>23.3</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>5.0</speed>
-            <direction>
-              <angle>327</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>47.9</humid>
-        </weather>
-      </record>
-      <record>
-        <time>10:00</time>
-        <weather>
-          <temp>22.9</temp>
-          <precip>0.2</precip>
-          <wind>
-            <speed>3.2</speed>
-            <direction>
-              <angle>335</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>53.1</humid>
-        </weather>
-      </record>
-      <record>
-        <time>11:00</time>
-        <weather>
-          <temp>23.3</temp>
-          <precip>0.2</precip>
-          <wind>
-            <speed>5.5</speed>
-            <direction>
-              <angle>319</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>48.6</humid>
-        </weather>
-      </record>
-      <record>
-        <time>12:00</time>
-        <weather>
-          <temp>22.7</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>4.1</speed>
-            <direction>
-              <angle>320</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>56.2</humid>
-        </weather>
-      </record>
-      <record>
-        <time>13:00</time>
-        <weather>
-          <temp>24.4</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>4.8</speed>
-            <direction>
-              <angle>319</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>46.9</humid>
-        </weather>
-      </record>
-      <record>
-        <time>14:00</time>
-        <weather>
-          <temp>24.6</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>4.9</speed>
-            <direction>
-              <angle>319</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>45.0</humid>
-        </weather>
-      </record>
-      <record>
-        <time>15:00</time>
-        <weather>
-          <temp>24.8</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>4.9</speed>
-            <direction>
-              <angle>317</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>42.9</humid>
-        </weather>
-      </record>
-      <record>
-        <time>16:00</time>
-        <weather>
-          <temp>24.0</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>5.3</speed>
-            <direction>
-              <angle>319</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>43.0</humid>
+          <humid>49.9</humid>
         </weather>
       </record>
       <record>
         <time>17:00</time>
         <weather>
-          <temp>23.4</temp>
+          <temp>16.5</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>4.5</speed>
+            <speed>3.7</speed>
             <direction>
-              <angle>320</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>44.7</humid>
-        </weather>
-      </record>
-      <record>
-        <time>18:00</time>
-        <weather>
-          <temp>22.1</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>3.1</speed>
-            <direction>
-              <angle>329</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>48.1</humid>
-        </weather>
-      </record>
-      <record>
-        <time>19:00</time>
-        <weather>
-          <temp>20.4</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>2.6</speed>
-            <direction>
-              <angle>342</angle>
-              <compass>N</compass>
-            </direction>
-          </wind>
-          <humid>54.4</humid>
-        </weather>
-      </record>
-      <record>
-        <time>20:00</time>
-        <weather>
-          <temp>19.2</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>2.4</speed>
-            <direction>
-              <angle>354</angle>
-              <compass>N</compass>
-            </direction>
-          </wind>
-          <humid>58.3</humid>
-        </weather>
-      </record>
-      <record>
-        <time>21:00</time>
-        <weather>
-          <temp>18.0</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>2.0</speed>
-            <direction>
-              <angle>2</angle>
-              <compass>N</compass>
-            </direction>
-          </wind>
-          <humid>63.0</humid>
-        </weather>
-      </record>
-      <record>
-        <time>22:00</time>
-        <weather>
-          <temp>16.8</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>1.7</speed>
-            <direction>
-              <angle>3</angle>
-              <compass>N</compass>
-            </direction>
-          </wind>
-          <humid>69.2</humid>
-        </weather>
-      </record>
-      <record>
-        <time>23:00</time>
-        <weather>
-          <temp>16.0</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>1.7</speed>
-            <direction>
-              <angle>357</angle>
-              <compass>N</compass>
-            </direction>
-          </wind>
-          <humid>73.5</humid>
-        </weather>
-      </record>
-      <record>
-        <time>00:00</time>
-        <weather>
-          <temp>15.6</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>1.8</speed>
-            <direction>
-              <angle>350</angle>
-              <compass>N</compass>
-            </direction>
-          </wind>
-          <humid>75.5</humid>
-        </weather>
-      </record>
-    </day>
-    <day index="2">
-      <record>
-        <time>01:00</time>
-        <weather>
-          <temp>15.6</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>1.7</speed>
-            <direction>
-              <angle>0</angle>
-              <compass>N</compass>
-            </direction>
-          </wind>
-          <humid>74.7</humid>
-        </weather>
-      </record>
-      <record>
-        <time>02:00</time>
-        <weather>
-          <temp>14.5</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>1.5</speed>
-            <direction>
-              <angle>344</angle>
-              <compass>N</compass>
-            </direction>
-          </wind>
-          <humid>80.1</humid>
-        </weather>
-      </record>
-      <record>
-        <time>03:00</time>
-        <weather>
-          <temp>14.2</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>1.8</speed>
-            <direction>
-              <angle>320</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>81.8</humid>
-        </weather>
-      </record>
-      <record>
-        <time>04:00</time>
-        <weather>
-          <temp>14.9</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>1.7</speed>
-            <direction>
-              <angle>336</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>80.6</humid>
-        </weather>
-      </record>
-      <record>
-        <time>05:00</time>
-        <weather>
-          <temp>16.4</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>1.0</speed>
-            <direction>
-              <angle>300</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>74.4</humid>
-        </weather>
-      </record>
-      <record>
-        <time>06:00</time>
-        <weather>
-          <temp>18.0</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>1.1</speed>
-            <direction>
-              <angle>292</angle>
-              <compass>W</compass>
-            </direction>
-          </wind>
-          <humid>67.2</humid>
-        </weather>
-      </record>
-      <record>
-        <time>07:00</time>
-        <weather>
-          <temp>19.9</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>1.8</speed>
-            <direction>
-              <angle>270</angle>
-              <compass>W</compass>
-            </direction>
-          </wind>
-          <humid>58.2</humid>
-        </weather>
-      </record>
-      <record>
-        <time>08:00</time>
-        <weather>
-          <temp>21.5</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>3.2</speed>
-            <direction>
-              <angle>277</angle>
-              <compass>W</compass>
-            </direction>
-          </wind>
-          <humid>53.1</humid>
-        </weather>
-      </record>
-      <record>
-        <time>09:00</time>
-        <weather>
-          <temp>22.9</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>5.1</speed>
-            <direction>
-              <angle>281</angle>
-              <compass>W</compass>
-            </direction>
-          </wind>
-          <humid>39.9</humid>
-        </weather>
-      </record>
-      <record>
-        <time>10:00</time>
-        <weather>
-          <temp>22.5</temp>
-          <precip>0.2</precip>
-          <wind>
-            <speed>6.4</speed>
-            <direction>
-              <angle>291</angle>
-              <compass>W</compass>
-            </direction>
-          </wind>
-          <humid>40.6</humid>
-        </weather>
-      </record>
-      <record>
-        <time>11:00</time>
-        <weather>
-          <temp>20.3</temp>
-          <precip>0.6</precip>
-          <wind>
-            <speed>7.3</speed>
-            <direction>
-              <angle>293</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>47.3</humid>
-        </weather>
-      </record>
-      <record>
-        <time>12:00</time>
-        <weather>
-          <temp>19.6</temp>
-          <precip>0.7</precip>
-          <wind>
-            <speed>6.3</speed>
-            <direction>
-              <angle>292</angle>
-              <compass>W</compass>
-            </direction>
-          </wind>
-          <humid>53.8</humid>
-        </weather>
-      </record>
-      <record>
-        <time>13:00</time>
-        <weather>
-          <temp>18.6</temp>
-          <precip>0.5</precip>
-          <wind>
-            <speed>5.6</speed>
-            <direction>
-              <angle>294</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>62.3</humid>
-        </weather>
-      </record>
-      <record>
-        <time>14:00</time>
-        <weather>
-          <temp>17.4</temp>
-          <precip>0.2</precip>
-          <wind>
-            <speed>5.3</speed>
-            <direction>
-              <angle>289</angle>
-              <compass>W</compass>
-            </direction>
-          </wind>
-          <humid>69.5</humid>
-        </weather>
-      </record>
-      <record>
-        <time>15:00</time>
-        <weather>
-          <temp>17.7</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>4.8</speed>
-            <direction>
-              <angle>292</angle>
-              <compass>W</compass>
-            </direction>
-          </wind>
-          <humid>67.9</humid>
-        </weather>
-      </record>
-      <record>
-        <time>16:00</time>
-        <weather>
-          <temp>18.5</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>5.2</speed>
-            <direction>
-              <angle>309</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>62.1</humid>
-        </weather>
-      </record>
-      <record>
-        <time>17:00</time>
-        <weather>
-          <temp>18.9</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>4.1</speed>
-            <direction>
-              <angle>298</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>59.3</humid>
-        </weather>
-      </record>
-      <record>
-        <time>18:00</time>
-        <weather>
-          <temp>18.3</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>2.6</speed>
-            <direction>
-              <angle>281</angle>
-              <compass>W</compass>
-            </direction>
-          </wind>
-          <humid>64.9</humid>
-        </weather>
-      </record>
-      <record>
-        <time>19:00</time>
-        <weather>
-          <temp>16.3</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>1.6</speed>
-            <direction>
-              <angle>250</angle>
-              <compass>W</compass>
-            </direction>
-          </wind>
-          <humid>76.1</humid>
-        </weather>
-      </record>
-      <record>
-        <time>20:00</time>
-        <weather>
-          <temp>16.2</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>1.6</speed>
-            <direction>
-              <angle>273</angle>
-              <compass>W</compass>
-            </direction>
-          </wind>
-          <humid>75.7</humid>
-        </weather>
-      </record>
-      <record>
-        <time>21:00</time>
-        <weather>
-          <temp>16.3</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>2.6</speed>
-            <direction>
-              <angle>300</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>72.8</humid>
-        </weather>
-      </record>
-      <record>
-        <time>22:00</time>
-        <weather>
-          <temp>16.1</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>2.6</speed>
-            <direction>
-              <angle>302</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>74.0</humid>
-        </weather>
-      </record>
-      <record>
-        <time>23:00</time>
-        <weather>
-          <temp>15.5</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>4.0</speed>
-            <direction>
-              <angle>298</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>77.9</humid>
-        </weather>
-      </record>
-      <record>
-        <time>00:00</time>
-        <weather>
-          <temp>15.4</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>4.5</speed>
-            <direction>
-              <angle>303</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>81.0</humid>
-        </weather>
-      </record>
-    </day>
-    <day index="3">
-      <record>
-        <time>01:00</time>
-        <weather>
-          <temp>14.8</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>4.5</speed>
-            <direction>
-              <angle>309</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>85.1</humid>
-        </weather>
-      </record>
-      <record>
-        <time>02:00</time>
-        <weather>
-          <temp>14.7</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>4.3</speed>
-            <direction>
-              <angle>308</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>85.9</humid>
-        </weather>
-      </record>
-      <record>
-        <time>03:00</time>
-        <weather>
-          <temp>14.7</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>4.5</speed>
-            <direction>
-              <angle>312</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>85.4</humid>
-        </weather>
-      </record>
-      <record>
-        <time>04:00</time>
-        <weather>
-          <temp>14.8</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>5.1</speed>
-            <direction>
-              <angle>307</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>84.3</humid>
-        </weather>
-      </record>
-      <record>
-        <time>05:00</time>
-        <weather>
-          <temp>15.8</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>5.7</speed>
-            <direction>
-              <angle>318</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>79.6</humid>
-        </weather>
-      </record>
-      <record>
-        <time>06:00</time>
-        <weather>
-          <temp>16.4</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>7.0</speed>
-            <direction>
-              <angle>323</angle>
-              <compass>NW</compass>
-            </direction>
-          </wind>
-          <humid>75.4</humid>
-        </weather>
-      </record>
-      <record>
-        <time>12:00</time>
-        <weather>
-          <temp>20.0</temp>
-          <precip>0.0</precip>
-          <wind>
-            <speed>7.8</speed>
-            <direction>
-              <angle>330</angle>
-              <compass>NW</compass>
+              <angle>166</angle>
+              <compass>S</compass>
             </direction>
           </wind>
           <humid>57.4</humid>
@@ -991,31 +40,967 @@
       <record>
         <time>18:00</time>
         <weather>
-          <temp>19.8</temp>
+          <temp>15.5</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>5.4</speed>
+            <speed>4.1</speed>
             <direction>
-              <angle>341</angle>
-              <compass>N</compass>
+              <angle>163</angle>
+              <compass>S</compass>
             </direction>
           </wind>
-          <humid>60.7</humid>
+          <humid>62.4</humid>
+        </weather>
+      </record>
+      <record>
+        <time>19:00</time>
+        <weather>
+          <temp>15.3</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>3.6</speed>
+            <direction>
+              <angle>170</angle>
+              <compass>S</compass>
+            </direction>
+          </wind>
+          <humid>63.5</humid>
+        </weather>
+      </record>
+      <record>
+        <time>20:00</time>
+        <weather>
+          <temp>13.6</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>3.0</speed>
+            <direction>
+              <angle>176</angle>
+              <compass>S</compass>
+            </direction>
+          </wind>
+          <humid>70.5</humid>
+        </weather>
+      </record>
+      <record>
+        <time>21:00</time>
+        <weather>
+          <temp>12.9</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>2.6</speed>
+            <direction>
+              <angle>169</angle>
+              <compass>S</compass>
+            </direction>
+          </wind>
+          <humid>73.8</humid>
+        </weather>
+      </record>
+      <record>
+        <time>22:00</time>
+        <weather>
+          <temp>11.6</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>2.1</speed>
+            <direction>
+              <angle>165</angle>
+              <compass>S</compass>
+            </direction>
+          </wind>
+          <humid>82.8</humid>
+        </weather>
+      </record>
+      <record>
+        <time>23:00</time>
+        <weather>
+          <temp>12.6</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>1.6</speed>
+            <direction>
+              <angle>129</angle>
+              <compass>SE</compass>
+            </direction>
+          </wind>
+          <humid>76.4</humid>
         </weather>
       </record>
       <record>
         <time>00:00</time>
         <weather>
-          <temp>16.5</temp>
+          <temp>11.0</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>1.9</speed>
+            <direction>
+              <angle>123</angle>
+              <compass>SE</compass>
+            </direction>
+          </wind>
+          <humid>84.8</humid>
+        </weather>
+      </record>
+    </day>
+    <day index="1">
+      <record>
+        <time>01:00</time>
+        <weather>
+          <temp>10.2</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>2.5</speed>
+            <direction>
+              <angle>134</angle>
+              <compass>SE</compass>
+            </direction>
+          </wind>
+          <humid>89.6</humid>
+        </weather>
+      </record>
+      <record>
+        <time>02:00</time>
+        <weather>
+          <temp>9.5</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>2.9</speed>
+            <direction>
+              <angle>108</angle>
+              <compass>E</compass>
+            </direction>
+          </wind>
+          <humid>92.1</humid>
+        </weather>
+      </record>
+      <record>
+        <time>03:00</time>
+        <weather>
+          <temp>9.0</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>3.0</speed>
+            <direction>
+              <angle>109</angle>
+              <compass>E</compass>
+            </direction>
+          </wind>
+          <humid>92.2</humid>
+        </weather>
+      </record>
+      <record>
+        <time>04:00</time>
+        <weather>
+          <temp>8.6</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>3.6</speed>
+            <direction>
+              <angle>112</angle>
+              <compass>E</compass>
+            </direction>
+          </wind>
+          <humid>91.1</humid>
+        </weather>
+      </record>
+      <record>
+        <time>05:00</time>
+        <weather>
+          <temp>8.3</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>4.1</speed>
+            <direction>
+              <angle>114</angle>
+              <compass>SE</compass>
+            </direction>
+          </wind>
+          <humid>89.4</humid>
+        </weather>
+      </record>
+      <record>
+        <time>06:00</time>
+        <weather>
+          <temp>9.3</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>4.1</speed>
+            <direction>
+              <angle>109</angle>
+              <compass>E</compass>
+            </direction>
+          </wind>
+          <humid>83.4</humid>
+        </weather>
+      </record>
+      <record>
+        <time>07:00</time>
+        <weather>
+          <temp>10.9</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>4.2</speed>
+            <direction>
+              <angle>115</angle>
+              <compass>SE</compass>
+            </direction>
+          </wind>
+          <humid>73.7</humid>
+        </weather>
+      </record>
+      <record>
+        <time>08:00</time>
+        <weather>
+          <temp>12.4</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>4.2</speed>
+            <direction>
+              <angle>116</angle>
+              <compass>SE</compass>
+            </direction>
+          </wind>
+          <humid>66.3</humid>
+        </weather>
+      </record>
+      <record>
+        <time>09:00</time>
+        <weather>
+          <temp>14.1</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>4.4</speed>
+            <direction>
+              <angle>116</angle>
+              <compass>SE</compass>
+            </direction>
+          </wind>
+          <humid>60.3</humid>
+        </weather>
+      </record>
+      <record>
+        <time>10:00</time>
+        <weather>
+          <temp>14.9</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>3.9</speed>
+            <direction>
+              <angle>125</angle>
+              <compass>SE</compass>
+            </direction>
+          </wind>
+          <humid>58.4</humid>
+        </weather>
+      </record>
+      <record>
+        <time>11:00</time>
+        <weather>
+          <temp>16.0</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>4.4</speed>
+            <direction>
+              <angle>132</angle>
+              <compass>SE</compass>
+            </direction>
+          </wind>
+          <humid>55.8</humid>
+        </weather>
+      </record>
+      <record>
+        <time>12:00</time>
+        <weather>
+          <temp>17.1</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>3.7</speed>
+            <direction>
+              <angle>144</angle>
+              <compass>SE</compass>
+            </direction>
+          </wind>
+          <humid>53.6</humid>
+        </weather>
+      </record>
+      <record>
+        <time>13:00</time>
+        <weather>
+          <temp>18.0</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>2.5</speed>
+            <direction>
+              <angle>175</angle>
+              <compass>S</compass>
+            </direction>
+          </wind>
+          <humid>52.0</humid>
+        </weather>
+      </record>
+      <record>
+        <time>14:00</time>
+        <weather>
+          <temp>18.7</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>1.8</speed>
+            <direction>
+              <angle>194</angle>
+              <compass>S</compass>
+            </direction>
+          </wind>
+          <humid>50.0</humid>
+        </weather>
+      </record>
+      <record>
+        <time>15:00</time>
+        <weather>
+          <temp>18.6</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>1.3</speed>
+            <direction>
+              <angle>249</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>51.1</humid>
+        </weather>
+      </record>
+      <record>
+        <time>16:00</time>
+        <weather>
+          <temp>17.0</temp>
+          <precip>2.3</precip>
+          <wind>
+            <speed>2.1</speed>
+            <direction>
+              <angle>286</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>60.4</humid>
+        </weather>
+      </record>
+      <record>
+        <time>17:00</time>
+        <weather>
+          <temp>15.1</temp>
+          <precip>0.7</precip>
+          <wind>
+            <speed>3.4</speed>
+            <direction>
+              <angle>24</angle>
+              <compass>NE</compass>
+            </direction>
+          </wind>
+          <humid>74.5</humid>
+        </weather>
+      </record>
+      <record>
+        <time>18:00</time>
+        <weather>
+          <temp>13.7</temp>
+          <precip>0.6</precip>
+          <wind>
+            <speed>2.8</speed>
+            <direction>
+              <angle>207</angle>
+              <compass>SW</compass>
+            </direction>
+          </wind>
+          <humid>85.8</humid>
+        </weather>
+      </record>
+      <record>
+        <time>19:00</time>
+        <weather>
+          <temp>12.8</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>2.7</speed>
+            <direction>
+              <angle>221</angle>
+              <compass>SW</compass>
+            </direction>
+          </wind>
+          <humid>90.5</humid>
+        </weather>
+      </record>
+      <record>
+        <time>20:00</time>
+        <weather>
+          <temp>12.0</temp>
+          <precip>0.1</precip>
+          <wind>
+            <speed>2.4</speed>
+            <direction>
+              <angle>229</angle>
+              <compass>SW</compass>
+            </direction>
+          </wind>
+          <humid>91.5</humid>
+        </weather>
+      </record>
+      <record>
+        <time>21:00</time>
+        <weather>
+          <temp>12.2</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>2.7</speed>
+            <direction>
+              <angle>255</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>89.8</humid>
+        </weather>
+      </record>
+      <record>
+        <time>22:00</time>
+        <weather>
+          <temp>12.4</temp>
+          <precip>0.4</precip>
+          <wind>
+            <speed>4.5</speed>
+            <direction>
+              <angle>274</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>83.7</humid>
+        </weather>
+      </record>
+      <record>
+        <time>23:00</time>
+        <weather>
+          <temp>11.8</temp>
+          <precip>0.3</precip>
+          <wind>
+            <speed>5.5</speed>
+            <direction>
+              <angle>278</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>83.6</humid>
+        </weather>
+      </record>
+      <record>
+        <time>00:00</time>
+        <weather>
+          <temp>11.1</temp>
+          <precip>0.4</precip>
+          <wind>
+            <speed>4.9</speed>
+            <direction>
+              <angle>290</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>87.7</humid>
+        </weather>
+      </record>
+    </day>
+    <day index="2">
+      <record>
+        <time>01:00</time>
+        <weather>
+          <temp>10.7</temp>
+          <precip>0.2</precip>
+          <wind>
+            <speed>4.5</speed>
+            <direction>
+              <angle>285</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>88.0</humid>
+        </weather>
+      </record>
+      <record>
+        <time>02:00</time>
+        <weather>
+          <temp>10.2</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>4.8</speed>
+            <direction>
+              <angle>289</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>87.3</humid>
+        </weather>
+      </record>
+      <record>
+        <time>03:00</time>
+        <weather>
+          <temp>10.0</temp>
+          <precip>0.2</precip>
+          <wind>
+            <speed>5.6</speed>
+            <direction>
+              <angle>293</angle>
+              <compass>NW</compass>
+            </direction>
+          </wind>
+          <humid>88.4</humid>
+        </weather>
+      </record>
+      <record>
+        <time>04:00</time>
+        <weather>
+          <temp>9.8</temp>
+          <precip>0.1</precip>
+          <wind>
+            <speed>5.3</speed>
+            <direction>
+              <angle>298</angle>
+              <compass>NW</compass>
+            </direction>
+          </wind>
+          <humid>90.1</humid>
+        </weather>
+      </record>
+      <record>
+        <time>05:00</time>
+        <weather>
+          <temp>9.8</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>5.7</speed>
+            <direction>
+              <angle>296</angle>
+              <compass>NW</compass>
+            </direction>
+          </wind>
+          <humid>88.3</humid>
+        </weather>
+      </record>
+      <record>
+        <time>06:00</time>
+        <weather>
+          <temp>9.9</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>5.8</speed>
+            <direction>
+              <angle>297</angle>
+              <compass>NW</compass>
+            </direction>
+          </wind>
+          <humid>87.5</humid>
+        </weather>
+      </record>
+      <record>
+        <time>07:00</time>
+        <weather>
+          <temp>10.6</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>6.5</speed>
+            <direction>
+              <angle>293</angle>
+              <compass>NW</compass>
+            </direction>
+          </wind>
+          <humid>83.2</humid>
+        </weather>
+      </record>
+      <record>
+        <time>08:00</time>
+        <weather>
+          <temp>11.8</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>7.0</speed>
+            <direction>
+              <angle>291</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>73.3</humid>
+        </weather>
+      </record>
+      <record>
+        <time>09:00</time>
+        <weather>
+          <temp>12.7</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>7.8</speed>
+            <direction>
+              <angle>293</angle>
+              <compass>NW</compass>
+            </direction>
+          </wind>
+          <humid>64.5</humid>
+        </weather>
+      </record>
+      <record>
+        <time>10:00</time>
+        <weather>
+          <temp>13.7</temp>
+          <precip>0.1</precip>
+          <wind>
+            <speed>7.6</speed>
+            <direction>
+              <angle>295</angle>
+              <compass>NW</compass>
+            </direction>
+          </wind>
+          <humid>56.6</humid>
+        </weather>
+      </record>
+      <record>
+        <time>11:00</time>
+        <weather>
+          <temp>14.6</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>6.9</speed>
+            <direction>
+              <angle>294</angle>
+              <compass>NW</compass>
+            </direction>
+          </wind>
+          <humid>52.3</humid>
+        </weather>
+      </record>
+      <record>
+        <time>12:00</time>
+        <weather>
+          <temp>15.6</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>6.8</speed>
+            <direction>
+              <angle>292</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>44.7</humid>
+        </weather>
+      </record>
+      <record>
+        <time>13:00</time>
+        <weather>
+          <temp>16.2</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>7.1</speed>
+            <direction>
+              <angle>290</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>37.3</humid>
+        </weather>
+      </record>
+      <record>
+        <time>14:00</time>
+        <weather>
+          <temp>16.2</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>6.9</speed>
+            <direction>
+              <angle>290</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>33.6</humid>
+        </weather>
+      </record>
+      <record>
+        <time>15:00</time>
+        <weather>
+          <temp>15.7</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>7.0</speed>
+            <direction>
+              <angle>288</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>35.0</humid>
+        </weather>
+      </record>
+      <record>
+        <time>16:00</time>
+        <weather>
+          <temp>14.7</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>6.9</speed>
+            <direction>
+              <angle>274</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>38.8</humid>
+        </weather>
+      </record>
+      <record>
+        <time>17:00</time>
+        <weather>
+          <temp>12.6</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>6.6</speed>
+            <direction>
+              <angle>271</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>46.7</humid>
+        </weather>
+      </record>
+      <record>
+        <time>18:00</time>
+        <weather>
+          <temp>11.1</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>6.9</speed>
+            <direction>
+              <angle>277</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>57.6</humid>
+        </weather>
+      </record>
+      <record>
+        <time>19:00</time>
+        <weather>
+          <temp>10.6</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>6.4</speed>
+            <direction>
+              <angle>278</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>61.1</humid>
+        </weather>
+      </record>
+      <record>
+        <time>20:00</time>
+        <weather>
+          <temp>9.8</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>6.2</speed>
+            <direction>
+              <angle>280</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>65.7</humid>
+        </weather>
+      </record>
+      <record>
+        <time>21:00</time>
+        <weather>
+          <temp>9.2</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>6.0</speed>
+            <direction>
+              <angle>277</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>67.0</humid>
+        </weather>
+      </record>
+      <record>
+        <time>22:00</time>
+        <weather>
+          <temp>8.6</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>6.2</speed>
+            <direction>
+              <angle>279</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>67.5</humid>
+        </weather>
+      </record>
+      <record>
+        <time>23:00</time>
+        <weather>
+          <temp>8.4</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>5.6</speed>
+            <direction>
+              <angle>274</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>68.9</humid>
+        </weather>
+      </record>
+      <record>
+        <time>00:00</time>
+        <weather>
+          <temp>8.0</temp>
           <precip>0.0</precip>
           <wind>
             <speed>4.6</speed>
             <direction>
-              <angle>317</angle>
-              <compass>NW</compass>
+              <angle>272</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>70.7</humid>
+        </weather>
+      </record>
+    </day>
+    <day index="3">
+      <record>
+        <time>01:00</time>
+        <weather>
+          <temp>7.4</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>4.3</speed>
+            <direction>
+              <angle>268</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>72.1</humid>
+        </weather>
+      </record>
+      <record>
+        <time>02:00</time>
+        <weather>
+          <temp>7.4</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>4.2</speed>
+            <direction>
+              <angle>267</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>70.8</humid>
+        </weather>
+      </record>
+      <record>
+        <time>03:00</time>
+        <weather>
+          <temp>7.5</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>4.5</speed>
+            <direction>
+              <angle>268</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>67.9</humid>
+        </weather>
+      </record>
+      <record>
+        <time>04:00</time>
+        <weather>
+          <temp>7.4</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>4.5</speed>
+            <direction>
+              <angle>269</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>67.3</humid>
+        </weather>
+      </record>
+      <record>
+        <time>05:00</time>
+        <weather>
+          <temp>7.0</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>3.9</speed>
+            <direction>
+              <angle>267</angle>
+              <compass>W</compass>
             </direction>
           </wind>
           <humid>68.9</humid>
+        </weather>
+      </record>
+      <record>
+        <time>06:00</time>
+        <weather>
+          <temp>8.3</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>4.7</speed>
+            <direction>
+              <angle>271</angle>
+              <compass>W</compass>
+            </direction>
+          </wind>
+          <humid>64.6</humid>
+        </weather>
+      </record>
+      <record>
+        <time>12:00</time>
+        <weather>
+          <temp>14.7</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>3.7</speed>
+            <direction>
+              <angle>230</angle>
+              <compass>SW</compass>
+            </direction>
+          </wind>
+          <humid>43.4</humid>
+        </weather>
+      </record>
+      <record>
+        <time>18:00</time>
+        <weather>
+          <temp>10.1</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>2.4</speed>
+            <direction>
+              <angle>39</angle>
+              <compass>NE</compass>
+            </direction>
+          </wind>
+          <humid>77.9</humid>
+        </weather>
+      </record>
+      <record>
+        <time>00:00</time>
+        <weather>
+          <temp>8.2</temp>
+          <precip>0.0</precip>
+          <wind>
+            <speed>2.3</speed>
+            <direction>
+              <angle>312</angle>
+              <compass>NW</compass>
+            </direction>
+          </wind>
+          <humid>87.0</humid>
         </weather>
       </record>
     </day>
@@ -1023,61 +1008,61 @@
       <record>
         <time>06:00</time>
         <weather>
-          <temp>17.4</temp>
+          <temp>6.9</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>4.2</speed>
+            <speed>5.4</speed>
             <direction>
-              <angle>329</angle>
+              <angle>314</angle>
               <compass>NW</compass>
             </direction>
           </wind>
-          <humid>66.0</humid>
+          <humid>77.3</humid>
         </weather>
       </record>
       <record>
         <time>12:00</time>
         <weather>
-          <temp>23.6</temp>
+          <temp>6.6</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>4.6</speed>
+            <speed>12.2</speed>
             <direction>
-              <angle>330</angle>
+              <angle>318</angle>
               <compass>NW</compass>
             </direction>
           </wind>
-          <humid>40.1</humid>
+          <humid>54.3</humid>
         </weather>
       </record>
       <record>
         <time>18:00</time>
         <weather>
-          <temp>20.9</temp>
+          <temp>5.1</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>3.8</speed>
+            <speed>8.1</speed>
             <direction>
               <angle>327</angle>
               <compass>NW</compass>
             </direction>
           </wind>
-          <humid>48.2</humid>
+          <humid>32.3</humid>
         </weather>
       </record>
       <record>
         <time>00:00</time>
         <weather>
-          <temp>15.9</temp>
+          <temp>0.7</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>5.6</speed>
+            <speed>8.3</speed>
             <direction>
               <angle>321</angle>
               <compass>NW</compass>
             </direction>
           </wind>
-          <humid>78.4</humid>
+          <humid>53.3</humid>
         </weather>
       </record>
     </day>
@@ -1085,61 +1070,61 @@
       <record>
         <time>06:00</time>
         <weather>
-          <temp>16.7</temp>
+          <temp>-0.8</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>5.9</speed>
+            <speed>5.3</speed>
             <direction>
-              <angle>323</angle>
+              <angle>316</angle>
               <compass>NW</compass>
             </direction>
           </wind>
-          <humid>76.6</humid>
+          <humid>59.4</humid>
         </weather>
       </record>
       <record>
         <time>12:00</time>
         <weather>
-          <temp>21.4</temp>
+          <temp>5.3</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>7.4</speed>
+            <speed>9.7</speed>
             <direction>
-              <angle>324</angle>
+              <angle>328</angle>
               <compass>NW</compass>
             </direction>
           </wind>
-          <humid>45.2</humid>
+          <humid>28.9</humid>
         </weather>
       </record>
       <record>
         <time>18:00</time>
         <weather>
-          <temp>18.2</temp>
+          <temp>3.2</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>6.1</speed>
+            <speed>5.3</speed>
             <direction>
-              <angle>339</angle>
-              <compass>N</compass>
+              <angle>330</angle>
+              <compass>NW</compass>
             </direction>
           </wind>
-          <humid>45.2</humid>
+          <humid>41.2</humid>
         </weather>
       </record>
       <record>
         <time>00:00</time>
         <weather>
-          <temp>13.6</temp>
+          <temp>1.0</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>3.8</speed>
+            <speed>4.3</speed>
             <direction>
-              <angle>311</angle>
+              <angle>307</angle>
               <compass>NW</compass>
             </direction>
           </wind>
-          <humid>66.3</humid>
+          <humid>73.7</humid>
         </weather>
       </record>
     </day>
@@ -1147,61 +1132,61 @@
       <record>
         <time>06:00</time>
         <weather>
-          <temp>15.6</temp>
+          <temp>0.3</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>4.6</speed>
+            <speed>1.7</speed>
             <direction>
-              <angle>310</angle>
-              <compass>NW</compass>
+              <angle>273</angle>
+              <compass>W</compass>
             </direction>
           </wind>
-          <humid>62.7</humid>
+          <humid>67.5</humid>
         </weather>
       </record>
       <record>
         <time>12:00</time>
         <weather>
-          <temp>21.1</temp>
+          <temp>7.3</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>6.5</speed>
+            <speed>3.6</speed>
             <direction>
-              <angle>311</angle>
-              <compass>NW</compass>
+              <angle>238</angle>
+              <compass>SW</compass>
             </direction>
           </wind>
-          <humid>38.9</humid>
+          <humid>47.0</humid>
         </weather>
       </record>
       <record>
         <time>18:00</time>
         <weather>
-          <temp>19.0</temp>
+          <temp>6.5</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>5.4</speed>
+            <speed>3.4</speed>
             <direction>
-              <angle>331</angle>
-              <compass>NW</compass>
+              <angle>179</angle>
+              <compass>S</compass>
             </direction>
           </wind>
-          <humid>47.3</humid>
+          <humid>55.1</humid>
         </weather>
       </record>
       <record>
         <time>00:00</time>
         <weather>
-          <temp>14.9</temp>
+          <temp>5.9</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>2.3</speed>
+            <speed>4.3</speed>
             <direction>
-              <angle>284</angle>
-              <compass>W</compass>
+              <angle>177</angle>
+              <compass>S</compass>
             </direction>
           </wind>
-          <humid>67.5</humid>
+          <humid>74.6</humid>
         </weather>
       </record>
     </day>
@@ -1209,61 +1194,61 @@
       <record>
         <time>06:00</time>
         <weather>
-          <temp>15.9</temp>
+          <temp>8.5</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>4.9</speed>
+            <speed>4.3</speed>
             <direction>
-              <angle>298</angle>
-              <compass>NW</compass>
+              <angle>247</angle>
+              <compass>SW</compass>
             </direction>
           </wind>
-          <humid>80.4</humid>
+          <humid>77.9</humid>
         </weather>
       </record>
       <record>
         <time>12:00</time>
         <weather>
-          <temp>22.1</temp>
+          <temp>15.5</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>5.7</speed>
+            <speed>7.1</speed>
             <direction>
-              <angle>316</angle>
-              <compass>NW</compass>
+              <angle>266</angle>
+              <compass>W</compass>
             </direction>
           </wind>
-          <humid>48.9</humid>
+          <humid>57.9</humid>
         </weather>
       </record>
       <record>
         <time>18:00</time>
         <weather>
-          <temp>21.4</temp>
+          <temp>11.6</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>4.8</speed>
+            <speed>6.2</speed>
             <direction>
-              <angle>327</angle>
-              <compass>NW</compass>
+              <angle>259</angle>
+              <compass>W</compass>
             </direction>
           </wind>
-          <humid>50.9</humid>
+          <humid>80.5</humid>
         </weather>
       </record>
       <record>
         <time>00:00</time>
         <weather>
-          <temp>16.4</temp>
+          <temp>10.6</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>4.7</speed>
+            <speed>6.8</speed>
             <direction>
-              <angle>311</angle>
-              <compass>NW</compass>
+              <angle>289</angle>
+              <compass>W</compass>
             </direction>
           </wind>
-          <humid>72.5</humid>
+          <humid>77.6</humid>
         </weather>
       </record>
     </day>
@@ -1271,61 +1256,61 @@
       <record>
         <time>06:00</time>
         <weather>
-          <temp>18.2</temp>
+          <temp>9.9</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>5.2</speed>
+            <speed>5.1</speed>
             <direction>
-              <angle>319</angle>
+              <angle>310</angle>
               <compass>NW</compass>
             </direction>
           </wind>
-          <humid>65.9</humid>
+          <humid>74.0</humid>
         </weather>
       </record>
       <record>
         <time>12:00</time>
         <weather>
-          <temp>25.1</temp>
+          <temp>15.8</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>6.4</speed>
+            <speed>3.3</speed>
             <direction>
-              <angle>334</angle>
-              <compass>NW</compass>
+              <angle>265</angle>
+              <compass>W</compass>
             </direction>
           </wind>
-          <humid>32.7</humid>
+          <humid>44.6</humid>
         </weather>
       </record>
       <record>
         <time>18:00</time>
         <weather>
-          <temp>22.6</temp>
+          <temp>13.2</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>5.1</speed>
+            <speed>4.9</speed>
             <direction>
-              <angle>306</angle>
-              <compass>NW</compass>
+              <angle>120</angle>
+              <compass>SE</compass>
             </direction>
           </wind>
-          <humid>41.4</humid>
+          <humid>52.7</humid>
         </weather>
       </record>
       <record>
         <time>00:00</time>
         <weather>
-          <temp>17.4</temp>
+          <temp>11.4</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>3.4</speed>
+            <speed>4.6</speed>
             <direction>
-              <angle>337</angle>
-              <compass>NW</compass>
+              <angle>141</angle>
+              <compass>SE</compass>
             </direction>
           </wind>
-          <humid>66.1</humid>
+          <humid>76.6</humid>
         </weather>
       </record>
     </day>
@@ -1333,61 +1318,61 @@
       <record>
         <time>06:00</time>
         <weather>
-          <temp>19.1</temp>
+          <temp>10.3</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>3.8</speed>
+            <speed>3.1</speed>
             <direction>
-              <angle>323</angle>
+              <angle>303</angle>
               <compass>NW</compass>
             </direction>
           </wind>
-          <humid>70.9</humid>
+          <humid>79.4</humid>
         </weather>
       </record>
       <record>
         <time>12:00</time>
         <weather>
-          <temp>26.2</temp>
+          <temp>16.6</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>3.6</speed>
+            <speed>1.0</speed>
             <direction>
-              <angle>346</angle>
-              <compass>N</compass>
+              <angle>272</angle>
+              <compass>W</compass>
             </direction>
           </wind>
-          <humid>48.1</humid>
+          <humid>57.8</humid>
         </weather>
       </record>
       <record>
         <time>18:00</time>
         <weather>
-          <temp>26.2</temp>
+          <temp>10.1</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>3.2</speed>
+            <speed>3.7</speed>
             <direction>
-              <angle>333</angle>
+              <angle>310</angle>
               <compass>NW</compass>
             </direction>
           </wind>
-          <humid>43.2</humid>
+          <humid>91.3</humid>
         </weather>
       </record>
       <record>
         <time>00:00</time>
         <weather>
-          <temp>18.6</temp>
+          <temp>6.5</temp>
           <precip>0.0</precip>
           <wind>
-            <speed>2.1</speed>
+            <speed>1.9</speed>
             <direction>
-              <angle>330</angle>
+              <angle>302</angle>
               <compass>NW</compass>
             </direction>
           </wind>
-          <humid>73.7</humid>
+          <humid>94.3</humid>
         </weather>
       </record>
     </day>

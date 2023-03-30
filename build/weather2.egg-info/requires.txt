@@ -9,5 +9,5 @@ langdetect
 termcolor
 tabulate
 termutils
-getchlib
+getkey
 unitconvert

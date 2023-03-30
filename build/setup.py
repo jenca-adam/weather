@@ -1,6 +1,6 @@
 from setuptools import setup
 setup(name='weather2',
-    version='1.5.0',
+    version='1.6.0',
     author='Adam Jenca',
     description='Access weather forecast',
     long_description=
@@ -58,6 +58,22 @@ Angle in compass point ( 'N','NE','E','SE','S','SW','W', or 'NW' )
       Humidity in %.
 #### 4. `precip`(7timer will return bool)
       Float/Integer
+Importing module, please wait...usage: __init__.py [-h] [--city CITY] [--country COUNTRY] [-d] [-s SERVICE]
+                   [-u] [-a]
+
+Python app for getting weather forecast
+
+options:
+  -h, --help            show this help message and exit
+  --city CITY           City for forecast (if not passed, using current
+                        location)
+  --country COUNTRY     Country for forecast (see above)
+  -d, --debug           Debug
+  -s SERVICE, --service SERVICE
+                        Service to use ("yrno" or "7timer"). Implied with
+                        "average"(try to optimise the service)
+  -u, --ugly            Toggle JSON output
+  -a, --api             Just print the data (implies JSON output)
       Precipitation amount in milimeters
 ### Changing units
 ```python
@@ -108,7 +124,7 @@ That says basically enough to use it.
     author_email="jenca.adam@gmail.com",
     url="https://github.com/jenca-adam/weather",
     packages=['weather'],
-    install_requires=['urllib3','bs4','httplib2','geopy','selenium','colorama','lxml','langdetect','termcolor','tabulate','termutils','getchlib','unitconvert']
+    install_requires=['urllib3','bs4','httplib2','geopy','selenium','colorama','lxml','langdetect','termcolor','tabulate','termutils','getkey','unitconvert']
 
 
     

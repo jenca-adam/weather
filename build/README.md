@@ -17,11 +17,9 @@ forecast=weather.forecast('New York')
 forecast.tommorow['11:00'].precip # Get precipitation in New York at 11.00
 ```
 ### Different sources
-`weather` supports multiple weather sources:
+`weather` supports two weather sources:
 1. [Yr.No](https://yr.no)
-2. [Google](https://google.com)
-3. [7timer!](https://7timer.info)
-
+1. [7timer!](https://7timer.info)
 If you want to get weather from different source, pass `forecast` argument called `source`.
 ```python
 weather.forecast(source='yrno')
@@ -78,19 +76,23 @@ Just run `weather`:
 If you want to get all avaliable switches, use `weather -h`:
 
 ```python
-
 usage: weather [-h] [--city CITY] [--country COUNTRY] [-d] [-s SERVICE]
+                   [-u] [-a]
 
 Python app for getting weather forecast
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
-  --city CITY           City for forecast (if not passed, using current location)
+  --city CITY           City for forecast (if not passed, using current
+                        location)
   --country COUNTRY     Country for forecast (see above)
   -d, --debug           Debug
   -s SERVICE, --service SERVICE
-                        Service to use (e.g. "yrno","7timer","google"). Implied with "average"(try to optimise the service)
+                        Service to use ("yrno" or "7timer"). Implied with
+                        "average"(try to optimise the service)
   -u, --ugly            Toggle JSON output
+  -a, --api             Just print the data (implies JSON output)
+
 ``` 
 That says basically enough to use it.
 

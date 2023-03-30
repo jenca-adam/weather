@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-if __name__=='__main__':
+import sys
+if __name__=='__main__' and ('-a' not in sys.argv) and ('--api' not in sys.argv):
     print('Importing module, please wait...\r',end='')
 import json
 import urllib3
@@ -10,7 +11,7 @@ import random
 import time
 from geopy.geocoders import Nominatim
 from selenium import webdriver
-from selenium.webdriver import *
+#from selenium.webdriver import * #4
 import warnings
 import os
 import re
@@ -20,7 +21,6 @@ from pathlib import Path
 import selenium
 import colorama
 import inspect
-import sys
 import importlib
 import difflib
 from unitconvert.temperatureunits import TemperatureUnit as tu
@@ -33,7 +33,7 @@ import tabulate
 import calendar
 import datetime
 import termutils
-import getchlib
+import getkey as getchlib
 '''Python library for getting weather from different sources.
 Example:
 >>> import weather
@@ -69,11 +69,14 @@ def dateadd1(date):
     else:
         date[-1]+=1
     return datetime.date(*date)
-def foc2t(foc):
+def foc2t(foc,ugly=False):
     u=makeunit(foc.today.weather_as_list[0].unit)
     date=datetime.date.today()
     dayc=0
-    table=[]
+    if ugly:
+        table={}
+    else:
+        table=[]
     while True:
         begintime=datetime.datetime.now().hour if not dayc else 1
         try:
@@ -82,9 +85,14 @@ def foc2t(foc):
             break
         for h in range(begintime,24):
             weah=day[f'{h}:00']
-            table.append([str(date),f'{h}:00',str(weah.temp)+"°"+u,weah.precip,weah.humid,weah.wind.direction.direction,weah.wind.speed])
+            if not ugly:
+                table.append([str(date),f'{h}:00',str(weah.temp)+"°"+u,weah.precip,weah.humid,weah.wind.direction.direction,weah.wind.speed])
+            else:
+                table[f'{date} {h}:00']={"temp":weah.temp,"temp-unit":u,"precipitation":weah.precip,"rel-humidity":weah.humid,"wind-direction-compass":weah.wind.direction.direction,"wind-direction-angle":weah.wind.direction.angle,"wind-speed":weah.wind.speed}
         dayc+=1
         date=dateadd1(date)
+    if ugly:
+        return json.dumps(table)
     return tabulate.tabulate(table,['Date','Time',"Temperature",'Precipitation','Humidity','Wind direction','Wind speed'],tablefmt='fancy_grid')
 
 class TooManyRequestsError(ValueError):pass
@@ -123,7 +131,7 @@ class Browser:
     '''Metaclass of BetaChrome used to bypass Google bot detection'''
     def request(self,url,headers={}):
         '''Request url and set USER-AGENT headers'''
-        debugger.debug('requested {}'.format(url))
+        debugger.debug('requested url')
         hdr=self.HEADERS
         hdr.update(headers)
         return _h.request(url,headers=hdr)
@@ -180,6 +188,10 @@ class DirectionError(WindError):
     '''
     Raised when direction is not "N","NE","E","SE","S","SW","W" or "NW"(if it is a string) or higher than 360(if it is a integer)
     '''
+class GeolocationError(Exception):
+    '''
+    Raised when Nominatim is out
+    '''
 class _fastener:
     def __init__(self):
         os.makedirs('.cache/weather/',exist_ok=True)
@@ -217,9 +229,12 @@ def searchurl(query):
     '''Returns Google Search URL according to query'''  
     return f'https://google.com/search?q={query}'
 def _getcountry(city):
-    '''Return country that city is located in''' 
-    a=locator.geocode(city).address.split(',')[-1].strip()
-    return translate(a)
+    '''Return country that city is located in'''
+    try:
+        a=locator.geocode(city).address.split(',')[-1].strip()
+    except Exception as e:
+        raise GeolocationError(f'unable to geolocate: Nominatim raised {str(e)}.') from None
+    return a
 def _rq(h,u):
     '''Handles IpApi ConnectionResetError'''
     try:
@@ -328,6 +343,8 @@ def search(query):
 LOCATION=curloc()
 CITY=LOCATION.city
 COUNTRY=LOCATION.country
+LAT=LOCATION.lat
+LON=LOCATION.lon
 ### Set temperature unit to Fahrenheit if user is in US
 if COUNTRY=='United States':
     UNIT=FAHRENHEIT
@@ -464,11 +481,11 @@ class _cacher:
     
 
         
-class _WeatherChannel:
-    '''weather.google type'''
+class _WeatherChannel:#DEPRECATED!
+    '''weather.google type - DEPRECATED!!!!'''
     def __init__(self):
         '''Set driver to None for fututre forecast requests will be faster'''
-        self.driver=None
+        #self.driver=None
     class Weather:
         '''Implementation of weather'''
         def __init__(self,wind,precip,temp,humid=None,unit=CELSIUS):
@@ -668,15 +685,19 @@ class _WeatherChannel:
         try:
                 ch.find_elements_by_class_name("jyfHyd")[1].click()
         except:pass
+        svgi=''
         #wait until forecast loads 
-        time.sleep(0.7)
-        svg=ch.find_element_by_id('wob_gsvg')
+        while not svgi: 
+            svg=ch.find_element('css selector','#wob_gsvg')
+            svgi=svg.get_attribute('innerHTML')
         svg=svg.get_attribute('outerHTML')
+        print(svg)
+
         return self.analyzesvg(svg,unit)
     def getprecip(self,ch):
         '''Gets precipitation data'''
         debugger.debug("Analyzing precipitation")
-        precip_html_element=ch.find_element_by_id('wob_pg')
+        precip_html_element=ch.find_element('css selector','#wob_pg')
         precip_html=precip_html_element.get_attribute('outerHTML')
         precip_soup=bs(precip_html,
                         'html.parser')
@@ -702,7 +723,7 @@ class _WeatherChannel:
     def getwind(self,ch):
         '''Gets wind data'''
         debugger.debug("Analyzing wind")
-        wind_html_element=ch.find_element_by_id('wob_wg')
+        wind_html_element=ch.find_element('css selector','#wob_wg')
         wind_html=wind_html_element.get_attribute('outerHTML')
         wind_soup=bs(wind_html,
                         'html.parser')
@@ -725,6 +746,7 @@ class _WeatherChannel:
         '''Gets full data and formats them into Forecast object'''
         debugger.debug("Parser has started!")
         svg=self.getsvg(ch,unit)
+        print(svg)
         precip=self.getprecip(ch)
         wind=self.getwind(ch)
 
@@ -821,6 +843,8 @@ class _WeatherChannel:
     def forecast(self,cityname=CITY,countryname='',unit=None,driver=None):
         '''Gets forecast'''
         err=None
+        debugger.warn("weather.google is deprecated and will be removed in future versions!")
+        warnings.warn("weather.google is deprecated and will be removed in future versions!")
         self.driver=driver
         if self.driver is None:
             driver=_driverSearch()
@@ -863,6 +887,7 @@ class _WeatherChannel:
             cacher.cache(foc)
             return foc
         except Exception as e:
+            raise
             debugger.debug(f"could not load forecast for {cityname}, trying without country; ({str(e)} throwed)","ERROR")
             err=WeatherError(f"could not get forecast for city {cityname}({str(e)} throwed)")
             if countryname==_DONTCHECK:
@@ -878,6 +903,7 @@ class _WeatherChannel:
             raise ValueError(
                             'Could not parse temperature string')
         return int(match.group(0).replace('°',''))
+
 class _YR_NORI:
     '''yr.no source'''
     def __init__(self):
@@ -1035,7 +1061,7 @@ class _YR_NORI:
         results=results.findAll('li')
         results=[self.expandhref(result.a['href']) for result in results]
         return self.SearchResults(results) 
-    def forecast(self,cityname=CITY,countryname=None,unit=None):
+    def forecast(self,cityname=CITY,countryname=COUNTRY,unit=None):
         '''Gets forecast'''
         err=None
         if not countryname:
@@ -1047,10 +1073,7 @@ class _YR_NORI:
                 err=NoSuchCityError(f"no such city: '{cityname}'")
         if err:
             raise err
-        if cityname==CITY and not countryname:
-            countryname=COUNTRY
         ca=cacher.getcached(cityname,countryname)
-        
         for caf in ca:
             
             foc=dumper.load(caf)
@@ -1061,6 +1084,10 @@ class _YR_NORI:
             lat,lon=LOCATION.lat,LOCATION.lon
         else:
             loct=locator.geocode(f'{cityname},{countryname}')
+            if loct is None:
+                raise GeolocationError(
+                f"No location named {cityname} in {countryname} found."
+                )
             lat,lon=loct.latitude,loct.longitude
         if unit is None:
             if countryname.lower()=='united states':
@@ -1261,7 +1288,7 @@ class _7Timer:
             return pattern.search(time).group(1)
         def c2f(self,fah,unit=CELSIUS):
             if unit==FAHRENHEIT:
-                return tu(fah,'C','F').doconnvert()
+                return tu(fah,'C','F').doconvert()
             return fah
 
              
@@ -1305,7 +1332,7 @@ class _driverSearch:
              debugger.debug("Lost connection to the driver,attempting reconnect...","ERROR")
 
         debugger.debug("initialized driver search")
-        self.browsers=[Chrome,Firefox,Safari,Ie,Edge]
+        self.browsers=[webdriver.Chrome,webdriver.Firefox,webdriver.Safari,webdriver.Ie,webdriver.Edge]
         self.reprs={repr(i):i for i in self.browsers}
         '''If it is possible, initiate in headless mode'''
         _CHOPT=chrome.options
@@ -1327,7 +1354,7 @@ class _driverSearch:
             os.makedirs('.cache/weather',exist_ok=True)
         debugger.debug("Getting browser avaliability data")
         if ('aval') not in os.listdir('.cache/weather'):
-            debugger.debug("Avaliability data not in cache!","WARNING")
+            debugger.debug("Availability data not in cache!","WARNING")
             chrome_aval=False
             firefox_aval=False
             safari_aval=False
@@ -1598,10 +1625,9 @@ class parser:
                 raise self.ParsingError(
                 "not a valid time -- second int is larger than first")
             return f+d
-
 class _Avg:
     '''get best forecast result'''
-    SVC=['yrno','google']
+    SVC=['yrno','7timer']
     def forecast(self,*a,**k):
         ress=[]
         for service in self.SVC:
@@ -1677,7 +1703,7 @@ debugger.debug=debugger.debug
 cacher=_cacher()
 fastener=_fastener()
 getcountry=fastener.getcountry
-SERVICES={'google':google,'yrno':yrno,'metno':yrno,'7timer':f7timer,'average':average}
+SERVICES={'yrno':yrno,'metno':yrno,'7timer':f7timer,'average':average}
 def fix(svc):
     fxd = difflib.get_close_matches(svc,SERVICES.keys(),n=1,cutoff=0.7)
     if len(fxd)>0:
@@ -1756,8 +1782,12 @@ class CLI:
         parser.add_argument('--city',type=str,help='City for forecast (if not passed, using current location)',nargs=1)
         parser.add_argument('--country',type=str,help='Country for forecast (see above)',nargs=1)
         parser.add_argument('-d','--debug',action='store_true',help='Debug')
-        parser.add_argument('-s','--service',type=str,help='Service to use (e.g. "yrno","7timer","google"). Implied with "average"(try to optimise the service)')
+        parser.add_argument('-s','--service',type=str,help='Service to use ("yrno" or "7timer"). Implied with "average"(try to optimise the service)')
+        parser.add_argument('-u','--ugly',action='store_true',help='Toggle JSON output')
+        parser.add_argument('-a','--api',action="store_true",help="Just print the data (implies JSON output)")
         args=parser.parse_args()
+        if args.api:
+            args.ugly=True
         if not args.city:
             args.city=[CITY]
         if not args.country:
@@ -1765,16 +1795,17 @@ class CLI:
         if not args.service:
             args.service="average"
         
-        if not args.debug:
+        if not (args.debug or args.api):
             termutils.clear()
             print('Loading ...')
         foc=forecast(args.city[0],args.country[0],service=args.service,debug=args.debug)
         if foc is None:
             raise NoSuchCityError(f'no such city :{args.city[0]!r}')
-        if not args.debug:
+        if not (args.debug or args.api):
             termutils.clear()
-        termcolor.cprint('Weather forecast for',end=' ',color='cyan')
-        termcolor.cprint(','.join([foc.city,foc.country]),color='yellow')
+        if not args.ugly:
+            termcolor.cprint('Weather forecast for',end=' ',color='cyan')
+            termcolor.cprint(','.join([foc.city,foc.country]),color='yellow')
         if isinstance(foc,yrno.Forecast):
             source='Yr.no'
         elif isinstance(foc,google.Forecast):
@@ -1784,10 +1815,13 @@ class CLI:
         else:
             source=None
         lac=2
-        if source:
+        if source and not args.ugly:
             print('Source : '+source)
             lac+=1
-        foc2t(foc)|More(num_lines=os.get_terminal_size().lines-lac,debug=args.debug)  
+        if args.api:
+            print(foc2t(foc,args.ugly))
+            return
+        foc2t(foc,args.ugly)|More(num_lines=os.get_terminal_size().lines-lac,debug=args.debug)  
         
 cli=CLI()
 main=cli.main
