@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: weather2
-Version: 1.5.0
+Version: 1.6.0
 Summary: Access weather forecast
 Home-page: https://github.com/jenca-adam/weather
 Author: Adam Jenca
@@ -69,6 +69,23 @@ Angle in compass point ( 'N','NE','E','SE','S','SW','W', or 'NW' )
       Humidity in %.
 #### 4. `precip`(7timer will return bool)
       Float/Integer
+Importing module, please wait...
+usage: __init__.py [-h] [--city CITY] [--country COUNTRY] [-d] [-s SERVICE]
+                   [-u] [-a]
+
+Python app for getting weather forecast
+
+options:
+  -h, --help            show this help message and exit
+  --city CITY           City for forecast (if not passed, using current
+                        location)
+  --country COUNTRY     Country for forecast (see above)
+  -d, --debug           Debug
+  -s SERVICE, --service SERVICE
+                        Service to use ("yrno" or "7timer"). Implied with
+                        "average"(try to optimise the service)
+  -u, --ugly            Toggle JSON output
+  -a, --api             Just print the data (implies JSON output)
       Precipitation amount in milimeters
 ### Changing units
 ```python
