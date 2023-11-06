@@ -1,11 +1,11 @@
 # weather - Access weather forecast
 ## Installation
 ```
-pip install weather
+pip install weather2
 ```
 ## Usage
 ```python
-import weather2
+import weather
 forecast=weather.forecast()
 forecast.today['6:00'].temp # Get temperature in current location at 6.00
 ```
