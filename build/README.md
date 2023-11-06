@@ -5,7 +5,7 @@ pip install weather
 ```
 ## Usage
 ```python
-import weather
+import weather2
 forecast=weather.forecast()
 forecast.today['6:00'].temp # Get temperature in current location at 6.00
 ```
