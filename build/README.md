@@ -1,7 +1,7 @@
 # weather - Access weather forecast
 ## Installation
 ```
-pip install weather
+pip install weather2
 ```
 ## Usage
 ```python
