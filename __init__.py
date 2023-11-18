@@ -216,7 +216,7 @@ class _fastener:
         if self.isrg(city):
             return self.data[city]
         else:
-            country=_getcountry(city)
+            country=_getcountry(city).split("/")[0].strip()
             self.register(city,country)
             return country
 def makeunit(u):

@@ -1,6 +1,6 @@
 from setuptools import setup
 setup(name='weather2',
-    version='1.6.1',
+    version='1.6.2',
     author='Adam Jenca',
     description='Access weather forecast',
     long_description=
@@ -29,9 +29,8 @@ forecast.tommorow['11:00'].precip # Get precipitation in New York at 11.00
 1. [7timer!](https://7timer.info)
 If you want to get weather from different source, pass `forecast` argument called `source`.
 ```python
-weather.forecast(source='yrno')
-weather.forecast(source='google')
-weather.forecast(source='7timer')
+weather.forecast(service='yrno')
+weather.forecast(service='7timer')
 ```
 ### Weather properties
 <ol>
@@ -105,7 +104,7 @@ That says basically enough to use it.
 
 ### License
 
-`weather` is licensed under *GPL license*
+`weather` is licensed under *MIT license*
 ''',
     long_description_content_type='text/markdown',
     classifiers=[
@@ -113,7 +112,7 @@ That says basically enough to use it.
                 "Environment :: Console",
                 "Intended Audience :: Developers",
                 "Intended Audience :: End Users/Desktop",
-                "License :: OSI Approved :: GNU General Public License (GPL)",
+                "License :: OSI Approved :: MIT License",
                 "Operating System :: OS Independent",
                 "Programming Language :: Python",
                 "Programming Language :: Python :: 3",

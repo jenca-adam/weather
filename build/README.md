@@ -22,9 +22,8 @@ forecast.tommorow['11:00'].precip # Get precipitation in New York at 11.00
 1. [7timer!](https://7timer.info)
 If you want to get weather from different source, pass `forecast` argument called `source`.
 ```python
-weather.forecast(source='yrno')
-weather.forecast(source='google')
-weather.forecast(source='7timer')
+weather.forecast(service='yrno')
+weather.forecast(service='7timer')
 ```
 ### Weather properties
 <ol>
@@ -98,4 +97,4 @@ That says basically enough to use it.
 
 ### License
 
-`weather` is licensed under *GPL license*
+`weather` is licensed under *MIT license*
